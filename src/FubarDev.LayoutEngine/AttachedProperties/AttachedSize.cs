@@ -1,6 +1,8 @@
-﻿namespace FubarDev.LayoutEngine.AttachedProperties;
+﻿using System.Diagnostics;
 
-public abstract record AttachedSize
+namespace FubarDev.LayoutEngine.AttachedProperties;
+
+public abstract class AttachedSize
 {
     public static UnchangedSize Unchanged{ get; } = new();
 
@@ -8,9 +10,35 @@ public abstract record AttachedSize
 
     public static FactorSize Factor(double value) => new(value);
 
-    public sealed record UnchangedSize : AttachedSize;
+    [DebuggerDisplay("Unchanged")]
+    public sealed class UnchangedSize : AttachedSize
+    {
+        public override string ToString() => "Unchanged";
+    }
 
-    public sealed record FixedSize(int Value) : AttachedSize;
-    
-    public sealed record FactorSize(double Value) : AttachedSize;
+    [DebuggerDisplay("Fixed={Value}")]
+    public sealed class FixedSize : AttachedSize
+    {
+        public FixedSize(int value)
+        {
+            Value = value;
+        }
+
+        public int Value { get; }
+
+        public override string ToString() => $"Fixed={Value}";
+    }
+
+    [DebuggerDisplay("Factor={Value}")]
+    public sealed class FactorSize : AttachedSize
+    {
+        public FactorSize(double value)
+        {
+            Value = value;
+        }
+
+        public double Value { get; }
+
+        public override string ToString() => $"Factor={Value}";
+    }
 }

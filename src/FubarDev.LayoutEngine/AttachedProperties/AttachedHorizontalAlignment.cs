@@ -22,5 +22,13 @@ public static class AttachedHorizontalAlignment
             AttachedProperties.Add(item, new AlignmentInfo(value.Value));
     }
 
-    private record AlignmentInfo(HorizontalAlignment Alignment);
+    private sealed class AlignmentInfo
+    {
+        public AlignmentInfo(HorizontalAlignment alignment)
+        {
+            Alignment = alignment;
+        }
+
+        public HorizontalAlignment Alignment { get; }
+    }
 }

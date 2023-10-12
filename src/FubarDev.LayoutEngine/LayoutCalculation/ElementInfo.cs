@@ -2,12 +2,24 @@
 
 namespace FubarDev.LayoutEngine.LayoutCalculation;
 
-internal record ElementInfo(ILayoutItem Item, int CalculatedSize, double? Factor = null)
+internal sealed class ElementInfo
 {
-    public int? MinSize { get; init; }
-    public int? MaxSize { get; init; }
+    public ElementInfo(ILayoutItem item, int calculatedSize, double? factor = null)
+    {
+        Item = item;
+        CalculatedSize = calculatedSize;
+        Factor = factor;
+        Final = factor == null;
+    }
 
-    public bool Final { get; init; } = Factor == null;
+    public ILayoutItem Item { get; }
+    public int CalculatedSize { get; }
+    public double? Factor { get; }
+
+    public int? MinSize { get; set; }
+    public int? MaxSize { get; set; }
+
+    public bool Final { get; set; }
 
     public ElementInfo EnsureLimits()
     {
@@ -19,12 +31,22 @@ internal record ElementInfo(ILayoutItem Item, int CalculatedSize, double? Factor
         var result = CalculatedSize;
         if (MaxSize <= result)
         {
-            return this with {CalculatedSize = MaxSize.Value, Final = true};
+            return new ElementInfo(Item, MaxSize.Value, Factor)
+            {
+                MinSize = MinSize,
+                MaxSize = MaxSize,
+                Final = true,
+            };
         }
 
         if (MinSize >= result)
         {
-            return this with {CalculatedSize = MinSize.Value, Final = true};
+            return new ElementInfo(Item, MinSize.Value, Factor)
+            {
+                MinSize = MinSize,
+                MaxSize = MaxSize,
+                Final = true,
+            };
         }
 
         return this;
