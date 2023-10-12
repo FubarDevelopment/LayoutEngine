@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
+		<IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="MainForm.cs">

@@ -4,6 +4,31 @@
 
 		<LangVersion>latestMajor</LangVersion>
 	  <Nullable>enable</Nullable>
+		<NoWarn>NU5128</NoWarn>
+
+		<Authors>Mark Junker;Fubar Development Junker</Authors>
+		<Copyright>Copyright © Fubar Development Junker 2023</Copyright>
+		<Description>Layout engine</Description>
+		<RepositoryUrl>https://github.com/FubarDevelopment/LayoutEngine.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <EmbedUntrackedSources>true</EmbedUntrackedSources>
+	  <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 
 	</PropertyGroup>
+
+  <ItemGroup>
+	  <SourceRoot Include="$(MSBuildThisFileDirectory)"/>
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)/README.md" PackagePath="\" Pack="true" Visible="false" />
+		<None Include="$(MSBuildThisFileDirectory)/doc/**" PackagePath="\doc" Pack="true" Visible="false" />
+	</ItemGroup>
 </Project>
