@@ -11,17 +11,17 @@ public static class BuilderMethods
 {
     public static LayoutBuilderRoot CreateRoot(Control control, Orientation orientation)
     {
+        if (control == null!)
+        {
+            throw new ArgumentNullException(nameof(control));
+        }
+
         return new LayoutBuilderRoot(new ControlLayoutRoot(control)
         {
             LayoutEngine = orientation == Orientation.Horizontal
                 ? new HorizontalStackLayoutEngine()
                 : new VerticalStackLayoutEngine(),
         });
-    }
-
-    public static LayoutBuilderRoot CreateRoot(IntPtr handle, Orientation orientation)
-    {
-        return CreateRoot(Control.FromHandle(handle), orientation);
     }
 
     public static LayoutBuilderContainer Pane(Orientation orientation)
@@ -41,6 +41,11 @@ public static class BuilderMethods
 
     public static LayoutBuilderContainer Pane(Control control, Orientation orientation, Visibility hiddenVisibility)
     {
+        if (control == null!)
+        {
+            throw new ArgumentNullException(nameof(control));
+        }
+
         return new LayoutBuilderContainer(_ =>
             new ControlLayoutContainer(control, hiddenVisibility)
             {
@@ -52,37 +57,32 @@ public static class BuilderMethods
 
     public static LayoutBuilderContainer Pane(Control control, Orientation orientation)
     {
+        if (control == null!)
+        {
+            throw new ArgumentNullException(nameof(control));
+        }
+
         return Pane(control, orientation, Visibility.Collapsed);
-    }
-
-    public static LayoutBuilderContainer Pane(IntPtr handle, Orientation orientation, Visibility hiddenVisibility)
-    {
-        return Pane(Control.FromHandle(handle), orientation, hiddenVisibility);
-    }
-
-    public static LayoutBuilderContainer Pane(IntPtr handle, Orientation orientation)
-    {
-        return Pane(handle, orientation, Visibility.Collapsed);
     }
 
     public static LayoutBuilderItem Item(Control control, Visibility hiddenVisibility)
     {
+        if (control == null!)
+        {
+            throw new ArgumentNullException(nameof(control));
+        }
+
         return new LayoutBuilderItem(_ => new ControlLayoutItem(control, hiddenVisibility));
     }
 
     public static LayoutBuilderItem Item(Control control)
     {
+        if (control == null!)
+        {
+            throw new ArgumentNullException(nameof(control));
+        }
+
         return Item(control, Visibility.Collapsed);
-    }
-
-    public static LayoutBuilderItem Item(IntPtr handle, Visibility hiddenVisibility)
-    {
-        return Item(Control.FromHandle(handle), hiddenVisibility);
-    }
-
-    public static LayoutBuilderItem Item(IntPtr handle)
-    {
-        return Item(handle, Visibility.Collapsed);
     }
 
     public static LayoutBuilderItem Item()
