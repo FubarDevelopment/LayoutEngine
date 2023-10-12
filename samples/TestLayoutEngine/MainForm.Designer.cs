@@ -51,8 +51,9 @@
             pnlMenu.BackColor = System.Drawing.Color.Blue;
             pnlMenu.Location = new System.Drawing.Point(13, 185);
             pnlMenu.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            pnlMenu.MinimumSize = new System.Drawing.Size(200, 400);
             pnlMenu.Name = "pnlMenu";
-            pnlMenu.Size = new System.Drawing.Size(225, 576);
+            pnlMenu.Size = new System.Drawing.Size(200, 400);
             pnlMenu.TabIndex = 1;
             // 
             // pnlDashboard
@@ -76,10 +77,11 @@
             // pnlDialogView
             // 
             pnlDialogView.BackColor = System.Drawing.Color.Goldenrod;
-            pnlDialogView.Location = new System.Drawing.Point(244, 185);
+            pnlDialogView.Location = new System.Drawing.Point(219, 185);
             pnlDialogView.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            pnlDialogView.MinimumSize = new System.Drawing.Size(400, 400);
             pnlDialogView.Name = "pnlDialogView";
-            pnlDialogView.Size = new System.Drawing.Size(516, 576);
+            pnlDialogView.Size = new System.Drawing.Size(400, 400);
             pnlDialogView.TabIndex = 4;
             // 
             // btnDump
@@ -92,7 +94,7 @@
             btnDump.UseVisualStyleBackColor = true;
             btnDump.Click += btnDump_Click;
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,7 +107,7 @@
             Controls.Add(pnlMenu);
             Controls.Add(pnlModuleSelector);
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            Name = "Form1";
+            Name = "MainForm";
             Text = "Form1";
             VisibleChanged += Form1_VisibleChanged;
             Layout += Form1_Layout;

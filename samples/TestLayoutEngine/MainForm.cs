@@ -15,7 +15,7 @@ namespace TestLayoutEngine
         public MainForm()
         {
             InitializeComponent();
-            _layoutRoot = CreateDefaultLayout();
+            _layoutRoot = CreateFillingLayout();
         }
 
         private void Form1_Layout(object sender, LayoutEventArgs e)
@@ -23,7 +23,7 @@ namespace TestLayoutEngine
             _layoutRoot.Layout();
         }
 
-        private ILayoutRoot CreateDefaultLayout()
+        private ILayoutRoot CreateCenteredLayout()
             => (CreateRoot(this, Orientation.Horizontal).Name("root")
                 << (Pane(Orientation.Vertical).Name("nonDashboardArea").Width(Factor(1))
                     << (Pane().Name("headerArea").HorizontalStackLayout(VerticalAlignment.Top)
@@ -36,6 +36,19 @@ namespace TestLayoutEngine
                         << Item(pnlDialogView)
                         << Item().Name("spacerRight").Width(Factor(1)))
                     << Item().Name("spacerBottom").Height(Factor(1)))
+                << Item(pnlDashboard))
+                .Build();
+
+        private ILayoutRoot CreateFillingLayout()
+            => (CreateRoot(this, Orientation.Horizontal).Name("root")
+                << (Pane(Orientation.Vertical).Name("nonDashboardArea").Width(Factor(1))
+                    << (Pane().Name("headerArea").HorizontalStackLayout(VerticalAlignment.Top)
+                        << Item(pnlLogo)
+                        << Item(pnlModuleSelector).Width(Factor(1)))
+                    << Item().Name("spacerTop").Height(Fixed(100))
+                    << (Pane().Name("mainArea").HorizontalStackLayout(VerticalAlignment.Fill).Height(Factor(1))
+                        << Item(pnlMenu)
+                        << Item(pnlDialogView).Width(Factor(1))))
                 << Item(pnlDashboard))
                 .Build();
 
