@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AC9E39BD-6122-4C73-8A66-A989193039B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DE5E7D6F-9427-47EF-8D01-81A7AA31BCFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{88ED1BE0-102C-4397-B238-659C33CB4DB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.LayoutEngine", "src\FubarDev.LayoutEngine\FubarDev.LayoutEngine.csproj", "{E99A0E1F-9F40-470C-9D15-BB4F220812CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.LayoutEngine.WinForms", "src\FubarDev.LayoutEngine.WinForms\FubarDev.LayoutEngine.WinForms.csproj", "{52C4E451-B319-42FE-99EF-A2F4755044C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.LayoutEngine.Test", "tests\FubarDev.LayoutEngine.Test\FubarDev.LayoutEngine.Test.csproj", "{A0A439AF-7363-4199-8AEB-AFEB0259241E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLayoutEngine", "samples\TestLayoutEngine\TestLayoutEngine.csproj", "{58050EF8-5540-4A51-A7CF-8966A60C426C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E99A0E1F-9F40-470C-9D15-BB4F220812CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E99A0E1F-9F40-470C-9D15-BB4F220812CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E99A0E1F-9F40-470C-9D15-BB4F220812CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E99A0E1F-9F40-470C-9D15-BB4F220812CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C4E451-B319-42FE-99EF-A2F4755044C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C4E451-B319-42FE-99EF-A2F4755044C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C4E451-B319-42FE-99EF-A2F4755044C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C4E451-B319-42FE-99EF-A2F4755044C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A439AF-7363-4199-8AEB-AFEB0259241E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A439AF-7363-4199-8AEB-AFEB0259241E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A439AF-7363-4199-8AEB-AFEB0259241E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A439AF-7363-4199-8AEB-AFEB0259241E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E99A0E1F-9F40-470C-9D15-BB4F220812CA} = {AC9E39BD-6122-4C73-8A66-A989193039B3}
+		{52C4E451-B319-42FE-99EF-A2F4755044C0} = {AC9E39BD-6122-4C73-8A66-A989193039B3}
+		{A0A439AF-7363-4199-8AEB-AFEB0259241E} = {DE5E7D6F-9427-47EF-8D01-81A7AA31BCFB}
+		{58050EF8-5540-4A51-A7CF-8966A60C426C} = {88ED1BE0-102C-4397-B238-659C33CB4DB8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A483F1C7-EF2E-482E-8FE3-F049E629539D}
+	EndGlobalSection
+EndGlobal
