@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -53,7 +53,7 @@ public static class LayoutItemExtensions
     public static Size GetMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
         var result =
-            child is ILayoutContainer container
+            child is ILayoutContainer { LayoutEngine: not null } container
                 ? container.GetMinimumSize(overlapLookup)
                 : GetRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup == null)
@@ -72,7 +72,7 @@ public static class LayoutItemExtensions
     public static Size GetMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
         var result =
-            child is ILayoutContainer container
+            child is ILayoutContainer { LayoutEngine: not null } container
                 ? container.GetMinimumSize(overlapLookup)
                 : GetRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup == null)
