@@ -1,7 +1,8 @@
-﻿using FubarDev.LayoutEngine.AttachedProperties;
-using FubarDev.LayoutEngine.Elements;
+﻿using FubarDev.LayoutEngine.Elements;
 using FubarDev.LayoutEngine.Engines;
 using FubarDev.LayoutEngine.Test.TestElements;
+
+using static FubarDev.LayoutEngine.AttachedProperties.AttachedSize;
 
 namespace FubarDev.LayoutEngine.Test;
 
@@ -16,7 +17,7 @@ public class VerticalLayoutTests
 
         var root = new TestRoot(VerticalLayoutEngine)
         {
-            (testItem1 = new TestItem().SetHorizontalAlignment(HorizontalAlignment.Fill)).SetLayoutHeight(AttachedSize.Factor(1)),
+            (testItem1 = new TestItem().SetHorizontalAlignment(HorizontalAlignment.Fill)).SetLayoutHeight(Factor(1)),
         };
 
         root.LayoutEngine = VerticalLayoutEngine;
@@ -37,7 +38,7 @@ public class VerticalLayoutTests
 
         var root = new TestRoot(VerticalLayoutEngine)
         {
-            (testItem1 = new TestItem().SetHorizontalAlignment(HorizontalAlignment.Fill)).SetLayoutHeight(AttachedSize.Factor(1)),
+            (testItem1 = new TestItem().SetHorizontalAlignment(HorizontalAlignment.Fill)).SetLayoutHeight(Factor(1)),
         };
 
         root.SetBounds(new Rectangle(0, 0, 100, 100));
@@ -113,5 +114,18 @@ public class VerticalLayoutTests
         Assert.Equal(0, testItem1.Location.Y);
         Assert.Equal(90, testItem1.Width);
         Assert.Equal(90, testItem1.Height);
+    }
+
+    [Fact]
+    public void FixedWidthAndHeightShouldReturnNonEmptyMinSize()
+    {
+        ILayoutItem testItem1 = new LayoutPane().SetLayoutWidth(Fixed(10)).SetLayoutHeight(Fixed(20));
+        var root = new TestRoot(VerticalLayoutEngine)
+        {
+            testItem1,
+        };
+
+        var minSize = root.GetMinimumClientSize();
+        Assert.Equal(new Size(0, 20), minSize);
     }
 }
