@@ -13,6 +13,7 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
     private readonly Visibility _hiddenVisibility;
     private IntPtr? _handle;
     private Size? _minimumSize;
+    private Rectangle? _bounds;
 
     public HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
     {
@@ -25,7 +26,11 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
 
     public string? Name { get; set; }
     public Point Location => Bounds.Location;
-    public Rectangle Bounds => ScreenToClient(RootWindow?.Handle ?? IntPtr.Zero, GetBounds(Handle));
+    public Rectangle Bounds
+    {
+        get { return _bounds ??= ScreenToClient(RootWindow?.Handle ?? IntPtr.Zero, GetBounds(Handle)); }
+    }
+
     public Size Size => Bounds.Size;
     public Size MinimumSize
     {
@@ -42,6 +47,16 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
 
     public void SetBounds(Rectangle bounds)
     {
+        if (_bounds != null)
+        {
+            if (_bounds == bounds)
+            {
+                return;
+            }
+
+            _bounds = null;
+        }
+
         if (!WindowsApi.SetWindowPos(
             Handle,
             IntPtr.Zero,
@@ -50,6 +65,8 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
         {
             throw new Win32Exception();
         }
+
+        _bounds = bounds;
     }
 
     private static Rectangle ScreenToClient(IntPtr handle, Rectangle rect)
