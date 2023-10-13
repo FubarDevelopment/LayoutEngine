@@ -21,6 +21,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
     }
 
     public Size ClientSize => GetClientRect(Handle).Size;
+    public Rectangle DisplayRectangle => GetDisplayRectangle(Handle);
 
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
@@ -52,7 +53,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
             return;
         }
 
-        var bounds = new Rectangle(new Point(), ClientSize).Shrink(Margin).Shrink(Padding);
+        var bounds = DisplayRectangle.Shrink(Margin).Shrink(Padding);
         LayoutEngine.Layout(this, bounds);
 
         foreach (var overlapItem in _overlaps)
@@ -85,5 +86,66 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
         }
 
         return rect;
+    }
+
+    private Rectangle GetDisplayRectangle(IntPtr handle)
+    {
+        var style = WindowsApi.GetWindowLongPtr(handle, WindowsApi.GWL_STYLE);
+        var hasHorizontalScrollbar = (style.ToInt32() & WindowsApi.WS_HSCROLL) != 0;
+        var hasVerticalScrollbar = (style.ToInt32() & WindowsApi.WS_VSCROLL) != 0;
+        if (!hasHorizontalScrollbar && !hasVerticalScrollbar)
+        {
+            return GetClientRect(Handle);
+        }
+
+        var clientRect = !hasHorizontalScrollbar || !hasVerticalScrollbar
+            ? GetClientRect(Handle)
+            : Rectangle.Empty;
+
+        int posX, width;
+        if (hasHorizontalScrollbar)
+        {
+            var info = new WindowsApi.SCROLLINFO()
+            {
+                fMask = WindowsApi.SIF_RANGE | WindowsApi.SIF_POS,
+            };
+
+            if (!WindowsApi.GetScrollInfo(Handle, WindowsApi.SB_HORZ, info))
+            {
+                throw new Win32Exception();
+            }
+
+            posX = -info.nPos;
+            width = info.nMax - info.nMin + 1;
+        }
+        else
+        {
+            posX = 0;
+            width = clientRect.Width;
+        }
+
+        int posY, height;
+        if (hasVerticalScrollbar)
+        {
+            var info = new WindowsApi.SCROLLINFO()
+            {
+                fMask = WindowsApi.SIF_RANGE | WindowsApi.SIF_POS,
+            };
+
+            if (!WindowsApi.GetScrollInfo(Handle, WindowsApi.SB_VERT, info))
+            {
+                throw new Win32Exception();
+            }
+
+            posY = -info.nPos;
+            height = info.nMax - info.nMin + 1;
+        }
+        else
+        {
+            posY = 0;
+            height = clientRect.Height;
+        }
+
+        return new Rectangle(posX, posY, width, height);
     }
 }

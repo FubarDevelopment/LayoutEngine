@@ -19,6 +19,7 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
     }
 
     public Size ClientSize => Control.ClientSize;
+    public Rectangle DisplayRectangle => Control.DisplayRectangle;
 
     public override void Add(ILayoutItem item)
     {
@@ -57,7 +58,7 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
             return;
         }
 
-        var bounds = new Rectangle(new Point(), ClientSize).Shrink(Margin).Shrink(Padding);
+        var bounds = DisplayRectangle.Shrink(Margin).Shrink(Padding);
         LayoutEngine.Layout(this, bounds);
 
         foreach (var overlapItem in _overlaps)
