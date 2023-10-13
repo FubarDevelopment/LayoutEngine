@@ -12,6 +12,7 @@ public class TestRoot : TestContainer, ILayoutRoot
     }
 
     public Size ClientSize => Size;
+    public Rectangle DisplayRectangle => new(Point.Empty, ClientSize);
 
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
     {
