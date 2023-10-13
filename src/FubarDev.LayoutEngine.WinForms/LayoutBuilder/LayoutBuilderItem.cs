@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 using FubarDev.LayoutEngine.AttachedProperties;
 using FubarDev.LayoutEngine.Elements;
@@ -24,6 +25,19 @@ public sealed class LayoutBuilderItem
         {
             var newContainer = oldFactory(overlapLookup);
             newContainer.Name = name;
+            return newContainer;
+        };
+
+        return this;
+    }
+
+    public LayoutBuilderItem MinimumSize(Size value)
+    {
+        var oldFactory = _itemFactory;
+        _itemFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            ((ISettableMinimumSize)newContainer).MinimumSize = value;
             return newContainer;
         };
 

@@ -2,7 +2,7 @@
 
 namespace FubarDev.LayoutEngine.Test.TestElements;
 
-public class TestItem : ILayoutItem
+public class TestItem : ILayoutItem, ISettableMinimumSize
 {
     private Rectangle? _bounds;
 
@@ -14,7 +14,7 @@ public class TestItem : ILayoutItem
         set => _bounds = value;
     }
     public Size Size => Bounds.Size;
-    public Size MinimumSize { get; init; }
+    public Size MinimumSize { get; set; }
     public Size MaximumSize { get; init; }
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;

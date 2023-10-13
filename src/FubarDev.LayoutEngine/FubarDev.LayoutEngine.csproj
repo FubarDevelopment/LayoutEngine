@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="$(AssemblyName).Test" />
+		<InternalsVisibleTo Include="$(AssemblyName).WinForms" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">

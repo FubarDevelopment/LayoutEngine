@@ -1,11 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
 namespace FubarDev.LayoutEngine.Elements;
 
-public class LayoutPane : ILayoutContainer, IEnumerable<ILayoutItem>
+public class LayoutPane : ILayoutContainer, ISettableMinimumSize, IEnumerable<ILayoutItem>
 {
     public const HorizontalAlignment DefaultHorizontalAlignment = HorizontalAlignment.Fill;
     public const VerticalAlignment DefaultVerticalAlignment = VerticalAlignment.Fill;
@@ -37,7 +37,7 @@ public class LayoutPane : ILayoutContainer, IEnumerable<ILayoutItem>
     }
 
     public Size Size => Bounds.Size;
-    public Size MinimumSize { get; } = new();
+    public Size MinimumSize { get; set; }
     public Size MaximumSize { get; } = new();
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;

@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 
 using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.Test.TestElements;
 
-public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>
+public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettableMinimumSize
 {
     private List<ILayoutItem> _children = new();
     private Rectangle? _bounds;
@@ -30,7 +30,7 @@ public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>
             this.EnsureMaximumHeight(this.EnsureMinimumHeight(value.Height)));
     }
     public Size Size => Bounds.Size;
-    public Size MinimumSize { get; init; }
+    public Size MinimumSize { get; set; }
     public Size MaximumSize { get; init; }
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;

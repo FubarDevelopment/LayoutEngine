@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 using FubarDev.LayoutEngine.AttachedProperties;
 using FubarDev.LayoutEngine.Elements;
@@ -21,6 +22,12 @@ public class LayoutBuilderRoot
     public LayoutBuilderRoot Name(string name)
     {
         _root.Name = name;
+        return this;
+    }
+
+    public LayoutBuilderRoot MinimumSize(Size value)
+    {
+        ((ISettableMinimumSize)_root).MinimumSize = value;
         return this;
     }
 
