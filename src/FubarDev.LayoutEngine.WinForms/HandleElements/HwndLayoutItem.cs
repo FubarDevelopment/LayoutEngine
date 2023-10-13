@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,7 +7,7 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.HandleElements;
 
-public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize
+public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin, ISettablePadding
 {
     private readonly IWin32Window _window;
     private readonly Visibility _hiddenVisibility;

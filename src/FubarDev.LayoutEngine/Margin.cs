@@ -18,6 +18,13 @@ public struct Margin
         _top = _left = _right = _bottom = all;
     }
 
+    public Margin(int leftRight, int topBottom)
+    {
+        _left = _right = leftRight;
+        _top = _bottom = topBottom;
+        _all = _top == _left && _top == _right && _top == _bottom;
+    }
+
     public Margin(int left, int top, int right, int bottom)
     {
         _top = top;

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FubarDev.LayoutEngine.Elements;
 
-public class LayoutPane : ILayoutContainer, ISettableMinimumSize, IEnumerable<ILayoutItem>
+public class LayoutPane : ILayoutContainer, ISettableMinimumSize, ISettableMargin, ISettablePadding, IEnumerable<ILayoutItem>
 {
     public const HorizontalAlignment DefaultHorizontalAlignment = HorizontalAlignment.Fill;
     public const VerticalAlignment DefaultVerticalAlignment = VerticalAlignment.Fill;

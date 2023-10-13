@@ -5,7 +5,7 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.ControlElements;
 
-public class ControlLayoutItem : ILayoutItem, ISettableMinimumSize
+public class ControlLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin, ISettablePadding
 {
     private readonly Control _control;
     private readonly Visibility _hiddenVisibility;
@@ -35,8 +35,17 @@ public class ControlLayoutItem : ILayoutItem, ISettableMinimumSize
     public int Width => _control.Width;
     public int Height => _control.Height;
     public Visibility Visibility => _control.Visible ? Visibility.Visible : _hiddenVisibility;
-    public Margin Margin => _control.Margin.ToMargin();
-    public Margin Padding => _control.Padding.ToMargin();
+    public Margin Margin
+    {
+        get => _control.Margin.ToMargin();
+        set => _control.Margin = value.ToPadding();
+    }
+
+    public Margin Padding
+    {
+        get => _control.Padding.ToMargin();
+        set => _control.Padding = value.ToPadding();
+    }
 
     public void SetBounds(Rectangle bounds)
     {

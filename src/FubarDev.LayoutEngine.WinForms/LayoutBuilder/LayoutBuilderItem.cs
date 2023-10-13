@@ -44,6 +44,32 @@ public sealed class LayoutBuilderItem
         return this;
     }
 
+    public LayoutBuilderItem Margin(Margin value)
+    {
+        var oldFactory = _itemFactory;
+        _itemFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            ((ISettableMargin)newContainer).Margin = value;
+            return newContainer;
+        };
+
+        return this;
+    }
+
+    public LayoutBuilderItem Padding(Margin value)
+    {
+        var oldFactory = _itemFactory;
+        _itemFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            ((ISettablePadding)newContainer).Padding = value;
+            return newContainer;
+        };
+
+        return this;
+    }
+
     public LayoutBuilderItem Identifier(string identifier)
     {
         if (_item != null)

@@ -45,6 +45,32 @@ public sealed class LayoutBuilderContainer
         return this;
     }
 
+    public LayoutBuilderContainer Margin(Margin value)
+    {
+        var oldFactory = _containerFactory;
+        _containerFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            ((ISettableMargin)newContainer).Margin = value;
+            return newContainer;
+        };
+
+        return this;
+    }
+
+    public LayoutBuilderContainer Padding(Margin value)
+    {
+        var oldFactory = _containerFactory;
+        _containerFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            ((ISettablePadding)newContainer).Padding = value;
+            return newContainer;
+        };
+
+        return this;
+    }
+
     public LayoutBuilderContainer VerticalStackLayout(HorizontalAlignment alignment)
     {
         var oldFactory = _containerFactory;

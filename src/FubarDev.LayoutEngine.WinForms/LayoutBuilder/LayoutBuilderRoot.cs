@@ -31,6 +31,18 @@ public class LayoutBuilderRoot
         return this;
     }
 
+    public LayoutBuilderRoot Margin(Margin value)
+    {
+        ((ISettableMargin)_root).Margin = value;
+        return this;
+    }
+
+    public LayoutBuilderRoot Padding(Margin value)
+    {
+        ((ISettablePadding)_root).Padding = value;
+        return this;
+    }
+
     public LayoutBuilderRoot SetDefaultAlignment(HorizontalAlignment alignment)
     {
         _root.LayoutEngine = new VerticalStackLayoutEngine(alignment);
