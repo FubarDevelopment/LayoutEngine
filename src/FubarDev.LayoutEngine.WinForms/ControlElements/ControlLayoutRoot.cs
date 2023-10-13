@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace FubarDev.LayoutEngine.Elements;
+using FubarDev.LayoutEngine.Elements;
+using FubarDev.LayoutEngine.HandleElements;
+
+namespace FubarDev.LayoutEngine.ControlElements;
 
 public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
 {
-    private static readonly ILayoutItem[] EmptyItems = new ILayoutItem[0];
+    private static readonly ILayoutItem[] EmptyItems = Array.Empty<ILayoutItem>();
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
 
     public ControlLayoutRoot(Control control)
@@ -15,6 +19,13 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
     }
 
     public Size ClientSize => Control.ClientSize;
+
+    public override void Add(ILayoutItem item)
+    {
+        base.Add(item);
+
+        SetRootWindow(Control, item);
+    }
 
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
@@ -25,6 +36,8 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
         }
 
         overlaps.Add(overlap);
+
+        SetRootWindow(Control, overlap);
     }
 
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
@@ -66,6 +79,22 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
         if (overlap is ILayoutContainer { LayoutEngine: { } layoutEngine } container)
         {
             layoutEngine.Layout(container, item.Bounds);
+        }
+    }
+
+    private static void SetRootWindow(IWin32Window rootWindow, ILayoutItem item)
+    {
+        if (item is HwndLayoutItem handleItem)
+        {
+            handleItem.RootWindow = rootWindow;
+        }
+
+        if (item is ILayoutContainer container)
+        {
+            foreach (var child in container.GetChildren())
+            {
+                SetRootWindow(rootWindow, child);
+            }
         }
     }
 }

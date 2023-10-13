@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace FubarDev.LayoutEngine.Elements;
+using FubarDev.LayoutEngine.Elements;
+
+namespace FubarDev.LayoutEngine.ControlElements;
 
 public class ControlLayoutContainer : ControlLayoutItem, ILayoutContainer
 {
@@ -25,7 +27,7 @@ public class ControlLayoutContainer : ControlLayoutItem, ILayoutContainer
         _children = children as List<ILayoutItem> ?? children.ToList();
     }
 
-    public void Add(ILayoutItem item)
+    public virtual void Add(ILayoutItem item)
     {
         _children.Add(item);
     }

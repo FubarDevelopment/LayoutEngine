@@ -1,9 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace FubarDev.LayoutEngine.Elements;
+using FubarDev.LayoutEngine.Elements;
 
-public class ControlLayoutItem : ILayoutItem
+namespace FubarDev.LayoutEngine.ControlElements;
+
+public class ControlLayoutItem : ILayoutItem, ISettableMinimumSize
 {
     private readonly Control _control;
     private readonly Visibility _hiddenVisibility;
@@ -23,7 +25,12 @@ public class ControlLayoutItem : ILayoutItem
     public Point Location => _control.Location;
     public Rectangle Bounds => _control.Bounds;
     public Size Size => _control.Size;
-    public Size MinimumSize => _control.MinimumSize;
+    public Size MinimumSize
+    {
+        get => _control.MinimumSize;
+        set => _control.MinimumSize = value;
+    }
+
     public Size MaximumSize => _control.MaximumSize;
     public int Width => _control.Width;
     public int Height => _control.Height;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using FubarDev.LayoutEngine.ControlElements;
 using FubarDev.LayoutEngine.Elements;
 using FubarDev.LayoutEngine.Engines;
+using FubarDev.LayoutEngine.HandleElements;
 using FubarDev.LayoutEngine.LayoutBuilder;
 
 namespace FubarDev.LayoutEngine;
@@ -17,6 +19,16 @@ public static class BuilderMethods
         }
 
         return new LayoutBuilderRoot(new ControlLayoutRoot(control)
+        {
+            LayoutEngine = orientation == Orientation.Horizontal
+                ? new HorizontalStackLayoutEngine()
+                : new VerticalStackLayoutEngine(),
+        });
+    }
+
+    public static LayoutBuilderRoot CreateRoot(IWin32Window window, Orientation orientation)
+    {
+        return new LayoutBuilderRoot(new HwndLayoutRoot(window)
         {
             LayoutEngine = orientation == Orientation.Horizontal
                 ? new HorizontalStackLayoutEngine()
@@ -55,6 +67,17 @@ public static class BuilderMethods
             });
     }
 
+    public static LayoutBuilderContainer Pane(IWin32Window window, Orientation orientation, Visibility hiddenVisibility)
+    {
+        return new LayoutBuilderContainer(_ =>
+            new HwndLayoutContainer(window, hiddenVisibility)
+            {
+                LayoutEngine = orientation == Orientation.Horizontal
+                    ? new HorizontalStackLayoutEngine()
+                    : new VerticalStackLayoutEngine(),
+            });
+    }
+
     public static LayoutBuilderContainer Pane(Control control, Orientation orientation)
     {
         if (control == null!)
@@ -63,6 +86,11 @@ public static class BuilderMethods
         }
 
         return Pane(control, orientation, Visibility.Collapsed);
+    }
+
+    public static LayoutBuilderContainer Pane(IWin32Window window, Orientation orientation)
+    {
+        return Pane(window, orientation, Visibility.Hidden);
     }
 
     public static LayoutBuilderItem Item(Control control, Visibility hiddenVisibility)
@@ -75,6 +103,11 @@ public static class BuilderMethods
         return new LayoutBuilderItem(_ => new ControlLayoutItem(control, hiddenVisibility));
     }
 
+    public static LayoutBuilderItem Item(IWin32Window window, Visibility hiddenVisibility)
+    {
+        return new LayoutBuilderItem(_ => new HwndLayoutItem(window, hiddenVisibility));
+    }
+
     public static LayoutBuilderItem Item(Control control)
     {
         if (control == null!)
@@ -83,6 +116,11 @@ public static class BuilderMethods
         }
 
         return Item(control, Visibility.Collapsed);
+    }
+
+    public static LayoutBuilderItem Item(IWin32Window window)
+    {
+        return Item(window, Visibility.Hidden);
     }
 
     public static LayoutBuilderItem Item()
