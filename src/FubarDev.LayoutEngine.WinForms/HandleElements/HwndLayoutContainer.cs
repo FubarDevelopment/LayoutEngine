@@ -13,6 +13,7 @@ public class HwndLayoutContainer : HwndLayoutItem, ILayoutContainer
     public HwndLayoutContainer(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
         : base(window, hiddenVisibility)
     {
+        Margin = new Margin(3, 4, 3, 4);
     }
 
     public ILayoutEngine? LayoutEngine { get; set; }

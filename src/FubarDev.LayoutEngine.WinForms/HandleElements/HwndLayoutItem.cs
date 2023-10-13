@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -37,7 +37,7 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;
     public Visibility Visibility => GetVisibility(Handle, _hiddenVisibility);
-    public Margin Margin { get; set; } = new(3);
+    public Margin Margin { get; set; }
     public Margin Padding { get; set; }
 
     public void SetBounds(Rectangle bounds)
