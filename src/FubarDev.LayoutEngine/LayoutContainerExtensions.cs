@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Linq;
 
@@ -19,7 +19,7 @@ public static class LayoutContainerExtensions
             _ => container.EnsureMinimumSize(new Size()),
         };
 
-        return result + container.Padding.Size;
+        return result;
     }
 
     private static Size GetMinimumSize(
@@ -28,18 +28,27 @@ public static class LayoutContainerExtensions
         VerticalAlignment alignment)
     {
         var result = container.GetUncollapsedChildren().GetMinimumSize(overlapLookup, alignment);
-
         if (overlapLookup == null)
         {
-            return result;
+            result += container.Padding.Size;
+        }
+        else
+        {
+            var items = overlapLookup.GetOverlappingItemsFor(container);
+            var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
+            var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
+            result = new Size(
+                Math.Max(result.Width, overlappingMinSize.Width),
+                Math.Max(result.Height, overlappingMinSize.Height));
+            result += container.Padding.Size;
         }
 
-        var items = overlapLookup.GetOverlappingItemsFor(container);
-        var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-        var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
-        return new Size(
-            Math.Max(result.Width, overlappingMinSize.Width),
-            Math.Max(result.Height, overlappingMinSize.Height));
+        var containerMinimumSize = container.MinimumSize;
+        result = new Size(
+            Math.Max(result.Width, containerMinimumSize.Width),
+            Math.Max(result.Height, containerMinimumSize.Height));
+
+        return result;
     }
 
     private static Size GetMinimumSize(
@@ -48,17 +57,26 @@ public static class LayoutContainerExtensions
         HorizontalAlignment alignment)
     {
         var result = container.GetUncollapsedChildren().GetMinimumSize(overlapLookup, alignment);
-
         if (overlapLookup == null)
         {
-            return result;
+            result += container.Padding.Size;
+        }
+        else
+        {
+            var items = overlapLookup.GetOverlappingItemsFor(container);
+            var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
+            var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
+            result = new Size(
+                Math.Max(result.Width, overlappingMinSize.Width),
+                Math.Max(result.Height, overlappingMinSize.Height));
+            result += container.Padding.Size;
         }
 
-        var items = overlapLookup.GetOverlappingItemsFor(container);
-        var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-        var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
-        return new Size(
-            Math.Max(result.Width, overlappingMinSize.Width),
-            Math.Max(result.Height, overlappingMinSize.Height));
+        var containerMinimumSize = container.MinimumSize;
+        result = new Size(
+            Math.Max(result.Width, containerMinimumSize.Width),
+            Math.Max(result.Height, containerMinimumSize.Height));
+
+        return result;
     }
 }

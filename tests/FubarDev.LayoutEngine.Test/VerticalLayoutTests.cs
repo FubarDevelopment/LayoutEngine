@@ -128,4 +128,22 @@ public class VerticalLayoutTests
         var minSize = root.GetMinimumClientSize();
         Assert.Equal(new Size(0, 20), minSize);
     }
+
+    [Fact]
+    public void EnsureMinimumSizeOfContainerIsUsed()
+    {
+        ILayoutItem testItem1 = new LayoutPane()
+        {
+            MinimumSize = new Size(10, 10),
+        };
+        var root = new TestRoot(VerticalLayoutEngine)
+        {
+            testItem1,
+        };
+
+        root.MinimumSize = new Size(20, 20);
+
+        var minSize = root.GetMinimumClientSize();
+        Assert.Equal(new Size(20, 20), minSize);
+    }
 }
