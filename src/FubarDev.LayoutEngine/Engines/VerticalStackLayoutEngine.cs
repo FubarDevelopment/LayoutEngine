@@ -83,14 +83,13 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
         private static int GetUsedSize(IEnumerable<ILayoutItem> controls)
         {
             return controls
-                .Select(control => AttachedHeight.GetValue(control) switch
+                .Sum(control => AttachedHeight.GetValue(control) switch
                 {
                     AttachedSize.UnchangedSize => control.Height + control.Margin.Vertical,
-                    AttachedSize.FixedSize s => control.EnsureMinimumHeight(s.Value) + control.Margin.Vertical,
+                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(0, s.Value)).Height + control.Margin.Vertical,
                     AttachedSize.FactorSize => control.Margin.Vertical,
                     _ => throw new NotSupportedException(),
-                })
-                .Sum();
+                });
         }
 
         private static (int RemainingFactorSize, double FactorSum) CalculateFactorInfo(

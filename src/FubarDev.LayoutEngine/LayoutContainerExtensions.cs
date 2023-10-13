@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 
@@ -16,7 +16,7 @@ public static class LayoutContainerExtensions
         {
             IHorizontalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
             IVerticalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
-            _ => new Size(container.EnsureMinimumWidth(0), container.EnsureMinimumHeight(0)),
+            _ => container.EnsureMinimumSize(new Size()),
         };
 
         return result + container.Padding.Size;

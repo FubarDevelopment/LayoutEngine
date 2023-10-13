@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -29,11 +29,10 @@ public class LayoutPane : ILayoutContainer, ISettableMinimumSize, IEnumerable<IL
 
     public Rectangle Bounds
     {
-        get => _bounds ?? DetermineDefaultBounds(this, _overlapLookup);
+        get => _bounds ??= DetermineDefaultBounds(this, _overlapLookup);
         private set => _bounds = new Rectangle(
-            value.Left, value.Top,
-            this.EnsureMaximumWidth(this.EnsureMinimumWidth(value.Width)),
-            this.EnsureMaximumHeight(this.EnsureMinimumHeight(value.Height)));
+            new Point(value.Left, value.Top),
+            this.EnsureMaximumSize(this.EnsureMinimumSize(new Size(value.Width, value.Height))));
     }
 
     public Size Size => Bounds.Size;

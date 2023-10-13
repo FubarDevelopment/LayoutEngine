@@ -86,7 +86,7 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
                 .Sum(control => AttachedWidth.GetValue(control) switch
                 {
                     AttachedSize.UnchangedSize => control.Width + control.Margin.Horizontal,
-                    AttachedSize.FixedSize s => control.EnsureMinimumWidth(s.Value) + control.Margin.Horizontal,
+                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(s.Value, 0)).Width + control.Margin.Horizontal,
                     AttachedSize.FactorSize => control.Margin.Horizontal,
                     _ => throw new NotSupportedException(),
                 });
