@@ -23,11 +23,6 @@ internal sealed class ElementInfo
 
     public ElementInfo EnsureLimits()
     {
-        if (Final)
-        {
-            return this;
-        }
-
         var result = CalculatedSize;
         if (MaxSize <= result)
         {

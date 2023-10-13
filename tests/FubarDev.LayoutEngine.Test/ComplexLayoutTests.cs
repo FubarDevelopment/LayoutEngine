@@ -1,7 +1,8 @@
-﻿using FubarDev.LayoutEngine.AttachedProperties;
-using FubarDev.LayoutEngine.Elements;
+﻿using FubarDev.LayoutEngine.Elements;
 using FubarDev.LayoutEngine.Engines;
 using FubarDev.LayoutEngine.Test.TestElements;
+
+using static FubarDev.LayoutEngine.AttachedProperties.AttachedSize;
 
 namespace FubarDev.LayoutEngine.Test;
 
@@ -28,9 +29,9 @@ public class ComplexLayoutTests
                     (moduleSelector = new TestItem()
                     {
                         Bounds = new Rectangle(0, 0, 10, 50),
-                    }).SetLayoutWidth(AttachedSize.Factor(1)),
+                    }).SetLayoutWidth(Factor(1)),
                 }),
-            }).SetLayoutWidth(AttachedSize.Factor(1)),
+            }).SetLayoutWidth(Factor(1)),
             (dashboard = new TestItem()
             {
                 Bounds = new Rectangle(0, 0, 10, 100),
@@ -66,12 +67,12 @@ public class ComplexLayoutTests
                     (moduleSelector = new TestItem()
                     {
                         Bounds = new Rectangle(0, 0, 10, 50),
-                    }).SetLayoutWidth(AttachedSize.Factor(1)),
+                    }).SetLayoutWidth(Factor(1)),
                 }),
-                (spacerTop = new LayoutPane()).SetLayoutHeight(AttachedSize.Factor(1)),
+                (spacerTop = new LayoutPane()).SetLayoutHeight(Factor(1)),
                 (coreAppView = new LayoutPane(HorizontalLayoutEngine)
                 {
-                    (spacerLeft = new LayoutPane()).SetLayoutWidth(AttachedSize.Factor(1)),
+                    (spacerLeft = new LayoutPane()).SetLayoutWidth(Factor(1)),
                     (appMenu = new TestItem()
                     {
                         Bounds = new Rectangle(0, 0, 20, 60),
@@ -80,10 +81,10 @@ public class ComplexLayoutTests
                     {
                         Bounds = new Rectangle(0, 0, 40, 60),
                     }).SetVerticalAlignment(VerticalAlignment.Center),
-                    (spacerRight = new LayoutPane()).SetLayoutWidth(AttachedSize.Factor(1)),
+                    (spacerRight = new LayoutPane()).SetLayoutWidth(Factor(1)),
                 }),
-                (spacerBottom = new LayoutPane()).SetLayoutHeight(AttachedSize.Factor(1)),
-            }).SetLayoutWidth(AttachedSize.Factor(1)),
+                (spacerBottom = new LayoutPane()).SetLayoutHeight(Factor(1)),
+            }).SetLayoutWidth(Factor(1)),
             (dashboard = new TestItem()
             {
                 Bounds = new Rectangle(0, 0, 10, 100),
@@ -113,9 +114,9 @@ public class ComplexLayoutTests
                     (moduleSelector = new TestItem()
                     {
                         Bounds = new Rectangle(0, 0, 10, 50),
-                    }).SetLayoutWidth(AttachedSize.Factor(1)),
+                    }).SetLayoutWidth(Factor(1)),
                 }),
-            }).SetLayoutWidth(AttachedSize.Factor(1)),
+            }).SetLayoutWidth(Factor(1)),
             (dashboard = new TestItem()
             {
                 Bounds = new Rectangle(0, 0, 10, 100),
@@ -126,10 +127,10 @@ public class ComplexLayoutTests
             globalView,
             (globalViewOverlap = new LayoutPane(VerticalLayoutEngine)
             {
-                (spacerTop = new LayoutPane()).SetLayoutHeight(AttachedSize.Factor(1)),
+                (spacerTop = new LayoutPane()).SetLayoutHeight(Factor(1)),
                 (coreAppView = new LayoutPane(HorizontalLayoutEngine)
                 {
-                    (spacerLeft = new LayoutPane()).SetLayoutWidth(AttachedSize.Factor(1)),
+                    (spacerLeft = new LayoutPane()).SetLayoutWidth(Factor(1)),
                     (appMenu = new TestItem()
                     {
                         Bounds = new Rectangle(0, 0, 20, 60),
@@ -138,13 +139,55 @@ public class ComplexLayoutTests
                     {
                         Bounds = new Rectangle(0, 0, 40, 60),
                     }).SetVerticalAlignment(VerticalAlignment.Center),
-                    (spacerRight = new LayoutPane()).SetLayoutWidth(AttachedSize.Factor(1)),
+                    (spacerRight = new LayoutPane()).SetLayoutWidth(Factor(1)),
                 }),
-                (spacerBottom = new LayoutPane()).SetLayoutHeight(AttachedSize.Factor(1)),
+                (spacerBottom = new LayoutPane()).SetLayoutHeight(Factor(1)),
             }));
 
         var minSize = root.GetMinimumClientSize();
         Assert.Equal(70, minSize.Width);
         Assert.Equal(60, minSize.Height);
+    }
+
+    [Fact]
+    public void RespectMinimumSizeForNestedPanesHorizontal()
+    {
+        ILayoutItem item;
+        var root = new TestRoot(VerticalLayoutEngine)
+        {
+            (new LayoutPane(HorizontalLayoutEngine)
+            {
+                (item = new TestItem()
+                {
+                    MinimumSize = new Size(100, 100),
+                }),
+            }.SetLayoutHeight(Factor(1))),
+        };
+
+        root.SetBounds(new Rectangle(0, 0, 50, 50));
+        root.Layout();
+
+        Assert.Equal(new Rectangle(0, 0, 100, 100), item.Bounds);
+    }
+
+    [Fact]
+    public void RespectMinimumSizeForNestedPanesVertical()
+    {
+        ILayoutItem item;
+        var root = new TestRoot(HorizontalLayoutEngine)
+        {
+            (new LayoutPane(VerticalLayoutEngine)
+            {
+                (item = new TestItem()
+                {
+                    MinimumSize = new Size(100, 100),
+                }),
+            }.SetLayoutWidth(Factor(1))),
+        };
+
+        root.SetBounds(new Rectangle(0, 0, 50, 50));
+        root.Layout();
+
+        Assert.Equal(new Rectangle(0, 0, 100, 100), item.Bounds);
     }
 }

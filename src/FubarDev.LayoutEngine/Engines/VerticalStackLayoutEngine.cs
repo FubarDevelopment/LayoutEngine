@@ -38,6 +38,11 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
             var horizontalLayout = AttachedHorizontalAlignment.GetValue(control) ?? DefaultHorizontalAlignment;
             newBounds = control.ApplyLayout(newBounds, horizontalLayout);
 
+            // Respect min & max size
+            var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size));
+            newBounds = new Rectangle(newBounds.Location, size);
+            newSize = size.Height;
+
             control.SetBounds(newBounds);
             control.TryLayout(newBounds);
 
