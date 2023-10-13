@@ -12,4 +12,16 @@ public static class LayoutRootExtensions
     {
         return root.GetMinimumSize(root) + root.Margin.Size;
     }
+
+    public static Size ApplyMinimumSize(this ILayoutRoot root)
+    {
+        var result = root.ApplyMinimumSize(root) + root.Margin.Size;
+
+        if (root is ISettableMinimumSize settableItem)
+        {
+            settableItem.MinimumSize = result;
+        }
+
+        return result;
+    }
 }

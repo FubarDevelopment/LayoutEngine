@@ -88,7 +88,7 @@ namespace TestLayoutEngine
 
         private void Form1_VisibleChanged(object sender, System.EventArgs e)
         {
-            var minSize = _layoutRoot.GetMinimumClientSize();
+            var minSize = _layoutRoot.ApplyMinimumSize();
             var borderSize = Size - ClientSize;
             MinimumSize = minSize + borderSize;
         }
