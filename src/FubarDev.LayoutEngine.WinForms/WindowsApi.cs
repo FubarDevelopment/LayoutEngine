@@ -1361,6 +1361,18 @@ internal static class WindowsApi
     public static extern bool GetScrollInfo(IntPtr hWnd, int fnBar, SCROLLINFO scrollInfo);
 
     [Pure]
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+    [DllImport("user32.dll", CharSet = CharSet.Auto, EntryPoint = "GetWindowLong")]
+    private static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
+
+    [Pure]
+    [DllImport("user32.dll", CharSet = CharSet.Auto, EntryPoint = "GetWindowLongPtr")]
+    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+
+    [Pure]
+    public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex)
+    {
+        return Environment.Is64BitProcess
+            ? GetWindowLongPtr64(hWnd, nIndex)
+            : GetWindowLongPtr32(hWnd, nIndex);
+    }
 }
