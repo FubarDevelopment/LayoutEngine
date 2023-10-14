@@ -41,7 +41,7 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
             // Respect min & max size
             var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size));
             newBounds = new Rectangle(newBounds.Location, size);
-            newSize = size.Width;
+            newSize = size.Width + control.Margin.Horizontal;
 
             control.SetBounds(newBounds);
             control.TryLayout(newBounds);

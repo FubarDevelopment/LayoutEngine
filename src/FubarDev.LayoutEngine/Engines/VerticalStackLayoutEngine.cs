@@ -41,7 +41,7 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
             // Respect min & max size
             var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size));
             newBounds = new Rectangle(newBounds.Location, size);
-            newSize = size.Height;
+            newSize = size.Height + control.Margin.Vertical;
 
             control.SetBounds(newBounds);
             control.TryLayout(newBounds);

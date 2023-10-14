@@ -35,4 +35,27 @@ public class CalculationTests
         Assert.Equal(expectedMinSize, container.MinimumSize);
         Assert.Equal(expectedMinSize, item.MinimumSize);
     }
+
+    [Fact]
+    public void TestChildMargin()
+    {
+        ILayoutItem appMenu, appDialog;
+        var root = new TestRoot(HorizontalLayoutEngine)
+        {
+            (appMenu = new TestItem()
+            {
+                MinimumSize = new Size(20, 60),
+                Margin = new Margin(3, 4),
+            }),
+            (appDialog = new TestItem()
+            {
+                MinimumSize = new Size(40, 60),
+                Margin = new Margin(3, 4),
+            }).SetLayoutWidth(Factor(1)),
+        };
+
+        root.Layout();
+        Assert.Equal(new Rectangle(3, 4, 20, 60), appMenu.Bounds);
+        Assert.Equal(new Rectangle(29, 4, 40, 60), appDialog.Bounds);
+    }
 }
