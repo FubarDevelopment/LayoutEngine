@@ -90,7 +90,7 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
             return controls
                 .Sum(control => AttachedWidth.GetValue(control) switch
                 {
-                    AttachedSize.UnchangedSize => control.Width + control.Margin.Horizontal,
+                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(control.Width, 0)).Width + control.Margin.Horizontal,
                     AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(s.Value, 0)).Width + control.Margin.Horizontal,
                     AttachedSize.FactorSize => control.Margin.Horizontal,
                     _ => throw new NotSupportedException(),

@@ -90,7 +90,7 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
             return controls
                 .Sum(control => AttachedHeight.GetValue(control) switch
                 {
-                    AttachedSize.UnchangedSize => control.Height + control.Margin.Vertical,
+                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(0, control.Height)).Height + control.Margin.Vertical,
                     AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(0, s.Value)).Height + control.Margin.Vertical,
                     AttachedSize.FactorSize => control.Margin.Vertical,
                     _ => throw new NotSupportedException(),
