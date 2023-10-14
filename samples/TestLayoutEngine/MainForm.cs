@@ -60,7 +60,7 @@ namespace TestLayoutEngine
                         << Item((IWin32Window)pnlLogo).Name("pnlLogo").Margin(new Margin(3, 4))
                         << Item((IWin32Window)pnlModuleSelector).Name("pnlModuleSelector").Margin(new Margin(3, 4)).Width(Factor(1)))
                     << Item().Name("spacerTop").Height(Fixed(100))
-                    << (Pane().Name("mainArea").HorizontalStackLayout(VerticalAlignment.Fill).Height(Factor(1))
+                    << (Pane(Orientation.Horizontal).Name("mainArea").Height(Factor(1))
                         << Item((IWin32Window)pnlMenu).Name("pnlMenu").Margin(new Margin(3, 4)).MinimumSize(new Size(200, 400))
                         << Item((IWin32Window)pnlDialogView).Name("pnlDialogView").Margin(new Margin(3, 4)).MinimumSize(new Size(400, 400)).Width(Factor(1))))
                 << Item((IWin32Window)pnlDashboard).Name("pnlDashboard").Margin(new Margin(3, 4)))
