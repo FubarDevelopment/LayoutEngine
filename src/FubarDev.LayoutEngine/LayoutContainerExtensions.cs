@@ -8,6 +8,12 @@ namespace FubarDev.LayoutEngine;
 
 public static class LayoutContainerExtensions
 {
+    /// <summary>
+    /// Gets the required minimum size for a container including its padding.
+    /// </summary>
+    /// <param name="container">The container to calculate the minimum size for.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <returns>The minimum size of the container including its padding.</returns>
     public static Size GetMinimumSize(
         this ILayoutContainer container,
         ILayoutOverlapLookup? overlapLookup = null)
@@ -16,7 +22,7 @@ public static class LayoutContainerExtensions
         {
             IHorizontalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
             IVerticalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
-            _ => container.EnsureMinimumSize(new Size()),
+            _ => container.EnsureMinimumSize(new Size()) + container.Padding.Size,
         };
 
         return result;
