@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -25,7 +25,7 @@ public class HwndLayoutContainer : HwndLayoutItem, ILayoutContainer
 
     public void SetChildren(IReadOnlyCollection<ILayoutItem> children)
     {
-        _children = children as List<ILayoutItem> ?? children.ToList();
+        _children = children.ToList();
     }
 
     public void Add(ILayoutItem item)

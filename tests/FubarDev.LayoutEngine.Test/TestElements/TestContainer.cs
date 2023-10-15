@@ -49,7 +49,7 @@ public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettab
 
     public void SetChildren(IReadOnlyCollection<ILayoutItem> children)
     {
-        _children = children as List<ILayoutItem> ?? children.ToList();
+        _children = children.ToList();
     }
 
     public void Add(ILayoutItem item)

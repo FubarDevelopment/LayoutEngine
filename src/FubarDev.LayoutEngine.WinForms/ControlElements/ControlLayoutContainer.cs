@@ -24,7 +24,7 @@ public class ControlLayoutContainer : ControlLayoutItem, ILayoutContainer
 
     public void SetChildren(IReadOnlyCollection<ILayoutItem> children)
     {
-        _children = children as List<ILayoutItem> ?? children.ToList();
+        _children = children.ToList();
     }
 
     public virtual void Add(ILayoutItem item)
