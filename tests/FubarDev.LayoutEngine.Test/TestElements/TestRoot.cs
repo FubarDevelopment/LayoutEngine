@@ -37,6 +37,6 @@ public class TestRoot : TestContainer, ILayoutRoot
 
     public void Layout()
     {
-        this.TryLayout(Bounds.Shrink(Margin));
+        this.TryLayout(Bounds.Shrink(Padding));
     }
 }

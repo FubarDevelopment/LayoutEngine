@@ -58,7 +58,7 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
             return;
         }
 
-        var bounds = DisplayRectangle.Shrink(Margin).Shrink(Padding);
+        var bounds = DisplayRectangle.Shrink(Padding);
         LayoutEngine.Layout(this, bounds);
 
         foreach (var overlapItem in _overlaps)
