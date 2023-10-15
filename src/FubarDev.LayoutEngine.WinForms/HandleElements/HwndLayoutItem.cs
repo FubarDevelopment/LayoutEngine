@@ -32,12 +32,12 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
 
     public string? Name { get; set; }
     public Point Location => Bounds.Location;
-    public virtual Rectangle Bounds
+    public Rectangle Bounds
     {
         get
         {
             return _bounds
-                ??= RootWindow.Handle == IntPtr.Zero
+                ??= RootWindow.Handle == IntPtr.Zero || RootWindow.Handle == Handle
                     ? GetBounds(Handle)
                     : ScreenToClient(RootWindow.Handle, GetBounds(Handle));
         }
@@ -81,7 +81,7 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
         _bounds = bounds;
     }
 
-    protected static Rectangle GetBounds(IntPtr handle)
+    private static Rectangle GetBounds(IntPtr handle)
     {
         if (!WindowsApi.GetWindowRect(handle, out var rect))
         {
