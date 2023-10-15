@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -26,12 +26,20 @@ public class HwndLayoutContainer : HwndLayoutItem, ILayoutContainer
     public void SetChildren(IReadOnlyCollection<ILayoutItem> children)
     {
         _children = children.ToList();
+        foreach (var item in children)
+        {
+            SetRootWindow(item);
+        }
     }
 
     public void Add(ILayoutItem item)
     {
         _children.Add(item);
+        SetRootWindow(item);
+    }
 
+    protected virtual void SetRootWindow(ILayoutItem item)
+    {
         if (RootWindow != null)
         {
             SetRootWindow(RootWindow, item);

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
 using FubarDev.LayoutEngine.Elements;
-using System.Windows.Forms;
 
 namespace FubarDev.LayoutEngine.HandleElements;
 
@@ -12,14 +12,14 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
 {
     private static readonly ILayoutItem[] EmptyItems = Array.Empty<ILayoutItem>();
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
-    private readonly IWin32Window _rootWindow;
 
     public HwndLayoutRoot(IWin32Window window)
         : base(window)
     {
-        RootWindow = _rootWindow = window;
+        RootWindow = window;
     }
 
+    public override Rectangle Bounds => GetBounds(Handle);
     public Size ClientSize => GetClientRect(Handle).Size;
     public Rectangle DisplayRectangle => GetDisplayRectangle(Handle);
 
@@ -33,7 +33,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
 
         overlaps.Add(overlap);
 
-        SetRootWindow(_rootWindow, overlap);
+        SetRootWindow(RootWindow, overlap);
     }
 
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
@@ -65,6 +65,11 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
                 LayoutOverlap(item, overlap);
             }
         }
+    }
+
+    protected override void SetRootWindow(ILayoutItem item)
+    {
+        SetRootWindow(RootWindow, item);
     }
 
     private static void LayoutOverlap(

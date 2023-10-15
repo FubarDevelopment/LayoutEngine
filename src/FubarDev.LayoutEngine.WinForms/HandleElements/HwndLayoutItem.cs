@@ -14,6 +14,7 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
     private IntPtr? _handle;
     private Size? _minimumSize;
     private Rectangle? _bounds;
+    private IWin32Window? _rootWindow;
 
     public HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
     {
@@ -22,13 +23,24 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
     }
 
     protected IntPtr Handle => _handle ??= _window.Handle;
-    internal IWin32Window? RootWindow { get; set; }
+
+    internal IWin32Window RootWindow
+    {
+        get => _rootWindow ?? throw new InvalidOperationException("No root window set yet");
+        set => _rootWindow = value;
+    }
 
     public string? Name { get; set; }
     public Point Location => Bounds.Location;
-    public Rectangle Bounds
+    public virtual Rectangle Bounds
     {
-        get { return _bounds ??= ScreenToClient(RootWindow?.Handle ?? IntPtr.Zero, GetBounds(Handle)); }
+        get
+        {
+            return _bounds
+                ??= RootWindow.Handle == IntPtr.Zero
+                    ? GetBounds(Handle)
+                    : ScreenToClient(RootWindow.Handle, GetBounds(Handle));
+        }
     }
 
     public Size Size => Bounds.Size;
@@ -69,6 +81,16 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
         _bounds = bounds;
     }
 
+    protected static Rectangle GetBounds(IntPtr handle)
+    {
+        if (!WindowsApi.GetWindowRect(handle, out var rect))
+        {
+            throw new Win32Exception();
+        }
+
+        return rect;
+    }
+
     private static Rectangle ScreenToClient(IntPtr handle, Rectangle rect)
     {
         var pointLeftTop = rect.Location;
@@ -86,16 +108,6 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
         var width = pointRightBottom.X - pointLeftTop.X;
         var height = pointRightBottom.Y - pointLeftTop.Y;
         return new Rectangle(pointLeftTop, new Size(width, height));
-    }
-
-    private static Rectangle GetBounds(IntPtr handle)
-    {
-        if (!WindowsApi.GetWindowRect(handle, out var rect))
-        {
-            throw new Win32Exception();
-        }
-
-        return rect;
     }
 
     private unsafe WindowsApi.MINMAXINFO? GetMinMaxInfo()
