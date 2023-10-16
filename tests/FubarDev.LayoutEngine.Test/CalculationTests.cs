@@ -128,4 +128,36 @@ public class CalculationTests
         Assert.Equal(new Rectangle(3, 4, 20, 60), appMenu.Bounds);
         Assert.Equal(new Rectangle(29, 4, 40, 60), appDialog.Bounds);
     }
+
+    [Fact]
+    public void TestNestedRoots()
+    {
+        var itemMinSize = new Size(100, 100);
+
+        TestRoot subRoot;
+        TestItem item;
+        var root = new TestRoot(HorizontalLayoutEngine)
+        {
+            (subRoot = new TestRoot(VerticalLayoutEngine)
+            {
+                (item = new TestItem()
+                {
+                    MinimumSize = itemMinSize,
+                }),
+            }.SetLayoutWidth(Factor(1))),
+        };
+
+        subRoot.Margin = new Margin(10);
+        var result = root.ApplyMinimumSize();
+        root.Layout();
+
+        Assert.Equal(itemMinSize + subRoot.Margin.Size, result);
+        Assert.Equal(itemMinSize + subRoot.Margin.Size, root.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, subRoot.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, item.GetEffectiveMinimumSize());
+
+        Assert.Equal(new Rectangle(Point.Empty, itemMinSize + subRoot.Margin.Size), root.Bounds);
+        Assert.Equal(new Rectangle(new Point(subRoot.Margin.Left, subRoot.Margin.Top), itemMinSize), subRoot.Bounds);
+        Assert.Equal(new Rectangle(Point.Empty, itemMinSize), item.Bounds);
+    }
 }

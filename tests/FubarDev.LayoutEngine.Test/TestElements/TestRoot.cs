@@ -37,6 +37,33 @@ public class TestRoot : TestContainer, ILayoutRoot
 
     public void Layout()
     {
-        this.TryLayout(Bounds.Shrink(Padding));
+        if (LayoutEngine == null)
+        {
+            return;
+        }
+
+        var bounds = DisplayRectangle.Shrink(Padding);
+        LayoutEngine.Layout(this, bounds);
+
+        foreach (var overlapItem in _overlaps)
+        {
+            var item = overlapItem.Key;
+            var overlaps = overlapItem.Value;
+            foreach (var overlap in overlaps)
+            {
+                LayoutOverlap(item, overlap);
+            }
+        }
+    }
+
+    private static void LayoutOverlap(
+        ILayoutItem item,
+        ILayoutItem overlap)
+    {
+        overlap.SetBounds(item.Bounds);
+        if (overlap is ILayoutContainer { LayoutEngine: { } layoutEngine } container)
+        {
+            layoutEngine.Layout(container, item.Bounds);
+        }
     }
 }

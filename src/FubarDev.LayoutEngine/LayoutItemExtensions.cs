@@ -40,13 +40,17 @@ public static class LayoutItemExtensions
 
     public static bool TryLayout(this ILayoutItem item, Rectangle bounds)
     {
-        if (item is not ILayoutContainer { LayoutEngine: { } layoutEngine } subContainer)
+        switch (item)
         {
-            return false;
+            case ILayoutRoot root:
+                root.Layout();
+                return true;
+            case ILayoutContainer { LayoutEngine: { } layoutEngine } subContainer:
+                layoutEngine.Layout(subContainer, bounds.Shrink(subContainer.Padding));
+                return true;
         }
 
-        layoutEngine.Layout(subContainer, bounds.Shrink(subContainer.Padding));
-        return true;
+        return false;
     }
 
     public static Size GetEffectiveMinimumSize(this ILayoutItem item)
@@ -57,10 +61,13 @@ public static class LayoutItemExtensions
 
     public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
-        var result =
-            child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.DetermineMinimumSize(overlapLookup)
-                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
+        var result = child switch
+        {
+            ILayoutRoot root => root.DetermineMinimumSize(),
+            ILayoutContainer { LayoutEngine: not null } container => container.DetermineMinimumSize(overlapLookup),
+            _ => DetermineRawMinimumSize(child, alignment) + child.Padding.Size,
+        };
+
         if (overlapLookup == null)
         {
             return result;
@@ -76,10 +83,13 @@ public static class LayoutItemExtensions
 
     public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
-        var result =
-            child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.DetermineMinimumSize(overlapLookup)
-                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
+        var result = child switch
+        {
+            ILayoutRoot root => root.DetermineMinimumSize(),
+            ILayoutContainer { LayoutEngine: not null } container => container.DetermineMinimumSize(overlapLookup),
+            _ => DetermineRawMinimumSize(child, alignment) + child.Padding.Size,
+        };
+
         if (overlapLookup == null)
         {
             return result;
@@ -95,10 +105,13 @@ public static class LayoutItemExtensions
 
     public static Size ApplyMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
-        var result =
-            child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.ApplyMinimumSize(overlapLookup)
-                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
+        var result = child switch
+        {
+            ILayoutRoot root => root.ApplyMinimumSize(),
+            ILayoutContainer { LayoutEngine: not null } container => container.ApplyMinimumSize(overlapLookup),
+            _ => DetermineRawMinimumSize(child, alignment) + child.Padding.Size,
+        };
+
         if (overlapLookup != null)
         {
             var items = overlapLookup.GetOverlappingItemsFor(child);
@@ -116,10 +129,13 @@ public static class LayoutItemExtensions
 
     public static Size ApplyMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
-        var result =
-            child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.ApplyMinimumSize(overlapLookup)
-                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
+        var result = child switch
+        {
+            ILayoutRoot root => root.ApplyMinimumSize(),
+            ILayoutContainer { LayoutEngine: not null } container => container.ApplyMinimumSize(overlapLookup),
+            _ => DetermineRawMinimumSize(child, alignment) + child.Padding.Size,
+        };
+
         if (overlapLookup != null)
         {
             var items = overlapLookup.GetOverlappingItemsFor(child);

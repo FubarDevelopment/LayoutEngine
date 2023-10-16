@@ -34,7 +34,7 @@ public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettab
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;
     public Visibility Visibility => Visibility.Visible;
-    public Margin Margin { get; init; }
+    public Margin Margin { get; set; }
     public Margin Padding { get; init; }
     public ILayoutEngine? LayoutEngine { get; set; }
     public void SetBounds(Rectangle bounds)
