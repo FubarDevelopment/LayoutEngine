@@ -36,6 +36,41 @@ public class CalculationTests
         Assert.Equal(expectedMinSize, item.MinimumSize);
     }
 
+
+    [Fact]
+    public void TestCanShrinkIfElementBecomesInvisible()
+    {
+        var itemMinSize = new Size(100, 100);
+
+        ILayoutContainer container;
+        TestItem item;
+        var root = new TestRoot(HorizontalLayoutEngine)
+        {
+            (container = new LayoutPane(VerticalLayoutEngine)
+            {
+                (item = new TestItem()
+                {
+                    MinimumSize = itemMinSize,
+                }),
+            }.SetLayoutWidth(Factor(1))),
+        };
+
+        var result = root.ApplyMinimumSize();
+
+        Assert.Equal(itemMinSize, result);
+        Assert.Equal(itemMinSize, root.MinimumSize);
+        Assert.Equal(itemMinSize, container.MinimumSize);
+        Assert.Equal(itemMinSize, item.MinimumSize);
+
+        var expectedCollapsedSize = new Size();
+        item.Visibility = Visibility.Collapsed;
+        result = root.ApplyMinimumSize();
+        Assert.Equal(expectedCollapsedSize, result);
+        Assert.Equal(expectedCollapsedSize, root.MinimumSize);
+        Assert.Equal(expectedCollapsedSize, container.MinimumSize);
+        Assert.Equal(itemMinSize, item.MinimumSize);
+    }
+
     [Fact]
     public void TestChildMargin()
     {

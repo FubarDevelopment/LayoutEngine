@@ -18,7 +18,7 @@ public class TestItem : ILayoutItem, ISettableMinimumSize
     public Size MaximumSize { get; init; }
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;
-    public Visibility Visibility => Visibility.Visible;
+    public Visibility Visibility { get; set; } = Visibility.Visible;
     public Margin Margin { get; init; }
     public Margin Padding { get; init; }
     public void SetBounds(Rectangle bounds)
