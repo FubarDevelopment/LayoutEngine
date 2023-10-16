@@ -40,25 +40,26 @@ public class HwndLayoutContainer : HwndLayoutItem, ILayoutContainer
 
     protected virtual void SetRootWindow(ILayoutItem item)
     {
-        if (RootWindow != null)
-        {
-            SetRootWindow(RootWindow, item);
-        }
+        SetRootWindow(RootWindow, item);
     }
 
     protected static void SetRootWindow(IWin32Window rootWindow, ILayoutItem item)
     {
-        if (item is HwndLayoutItem handleItem)
+        switch (item)
         {
-            handleItem.RootWindow = rootWindow;
-        }
+            case HwndLayoutItem handleItem:
+                handleItem.RootWindow = rootWindow;
+                break;
 
-        if (item is ILayoutContainer container)
-        {
-            foreach (var child in container.GetChildren())
-            {
-                SetRootWindow(rootWindow, child);
-            }
+            case ILayoutRoot:
+                break;
+
+            case ILayoutContainer container:
+                foreach (var child in container.GetChildren())
+                {
+                    SetRootWindow(rootWindow, child);
+                }
+                break;
         }
     }
 }

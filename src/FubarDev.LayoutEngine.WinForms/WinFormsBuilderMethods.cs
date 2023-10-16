@@ -9,7 +9,7 @@ using FubarDev.LayoutEngine.LayoutBuilder;
 
 namespace FubarDev.LayoutEngine;
 
-public static class BuilderMethods
+public static class WinFormsBuilderMethods
 {
     public static LayoutBuilderRoot CreateRoot(Control control, Orientation orientation)
     {

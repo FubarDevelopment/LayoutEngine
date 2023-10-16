@@ -21,12 +21,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{01FB4651
 	ProjectSection(SolutionItems) = preProject
 		nuget\FubarDev.LayoutEngine.targets = nuget\FubarDev.LayoutEngine.targets
 		nuget\FubarDev.LayoutEngine.WinForms.targets = nuget\FubarDev.LayoutEngine.WinForms.targets
+		nuget\FubarDev.LayoutEngine.Wpf.targets = nuget\FubarDev.LayoutEngine.Wpf.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{11FE7AAA-1999-49CC-AF57-985F337DEB3F}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FubarDev.LayoutEngine.Wpf", "src\FubarDev.LayoutEngine.Wpf\FubarDev.LayoutEngine.Wpf.csproj", "{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLayoutEngineWpf", "samples\TestLayoutEngineWpf\TestLayoutEngineWpf.csproj", "{C70B43C6-8D9B-460B-B6AB-7160E6E5061B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +55,14 @@ Global
 		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58050EF8-5540-4A51-A7CF-8966A60C426C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70B43C6-8D9B-460B-B6AB-7160E6E5061B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70B43C6-8D9B-460B-B6AB-7160E6E5061B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70B43C6-8D9B-460B-B6AB-7160E6E5061B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70B43C6-8D9B-460B-B6AB-7160E6E5061B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +72,8 @@ Global
 		{52C4E451-B319-42FE-99EF-A2F4755044C0} = {AC9E39BD-6122-4C73-8A66-A989193039B3}
 		{A0A439AF-7363-4199-8AEB-AFEB0259241E} = {DE5E7D6F-9427-47EF-8D01-81A7AA31BCFB}
 		{58050EF8-5540-4A51-A7CF-8966A60C426C} = {88ED1BE0-102C-4397-B238-659C33CB4DB8}
+		{79FB31C8-39CD-4CDC-AD00-BB837DB7DB80} = {AC9E39BD-6122-4C73-8A66-A989193039B3}
+		{C70B43C6-8D9B-460B-B6AB-7160E6E5061B} = {88ED1BE0-102C-4397-B238-659C33CB4DB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A483F1C7-EF2E-482E-8FE3-F049E629539D}

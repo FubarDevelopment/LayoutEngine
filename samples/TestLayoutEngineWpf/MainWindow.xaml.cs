@@ -1,37 +1,63 @@
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 
 using FubarDev.LayoutEngine;
 using FubarDev.LayoutEngine.Elements;
 
-using static FubarDev.LayoutEngine.WinFormsBuilderMethods;
+using static FubarDev.LayoutEngine.WpfBuilderMethods;
 using static FubarDev.LayoutEngine.AttachedProperties.AttachedSize;
 
-namespace TestLayoutEngine
+using LE = FubarDev.LayoutEngine;
+
+namespace TestLayoutEngineWpf
 {
-    public partial class MainForm : Form
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
         private readonly ILayoutRoot _layoutRoot;
 
-        public MainForm()
+        public MainWindow()
         {
             InitializeComponent();
             _layoutRoot = CreateFillingLayout();
         }
 
-        private void Form1_Layout(object sender, LayoutEventArgs e)
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            _layoutRoot.Layout();
+            // DumpInfo();
         }
+
+        private void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // DumpInfo();
+        }
+
+        /*
+        private void DumpInfo()
+        {
+            Debug.WriteLine("-----------------------------------");
+            Debug.WriteLine($"Scrollable Size: {scrollViewer.ScrollableWidth}/{scrollViewer.ScrollableHeight}");
+            Debug.WriteLine($"Extent Size: {scrollViewer.ExtentWidth}/{scrollViewer.ExtentHeight}");
+            Debug.WriteLine($"Viewport: {scrollViewer.ViewportWidth}/{scrollViewer.ViewportHeight}");
+            Debug.WriteLine($"Size: {scrollViewer.ActualWidth}/{scrollViewer.ActualHeight}");
+            Debug.WriteLine($"Content Offset: {scrollViewer.ContentHorizontalOffset}/{scrollViewer.ContentVerticalOffset}");
+            Debug.WriteLine($"Offset: {scrollViewer.HorizontalOffset}/{scrollViewer.VerticalOffset}");
+            Debug.WriteLine("===================================");
+            _layoutRoot.DumpLayout();
+        }
+        */
 
         private ILayoutRoot CreateCenteredLayout()
             => (CreateRoot(this, Orientation.Horizontal).Name("root")
                 << (Pane(Orientation.Vertical).Name("nonDashboardArea").Width(Factor(1))
-                    << (Pane().Name("headerArea").HorizontalStackLayout(VerticalAlignment.Top)
+                    << (Pane().Name("headerArea").HorizontalStackLayout(LE.VerticalAlignment.Top)
                         << Item(pnlLogo)
                         << Item(pnlModuleSelector).Width(Factor(1)))
                     << Item().Name("spacerTop").Height(Factor(1))
-                    << (Pane().Name("mainArea").HorizontalStackLayout(VerticalAlignment.Center)
+                    << (Pane().Name("mainArea").HorizontalStackLayout(LE.VerticalAlignment.Center)
                         << Item().Name("spacerLeft").Width(Factor(1))
                         << Item(pnlMenu)
                         << Item(pnlDialogView)
@@ -43,33 +69,20 @@ namespace TestLayoutEngine
         private ILayoutRoot CreateFillingLayout()
             => (CreateRoot(this, Orientation.Horizontal).Name("root")
                 << (Pane(Orientation.Vertical).Name("nonDashboardArea").Width(Factor(1))
-                    << (Pane().Name("headerArea").HorizontalStackLayout(VerticalAlignment.Top)
+                    << (Pane().Name("headerArea").HorizontalStackLayout(LE.VerticalAlignment.Top)
                         << Item(pnlLogo)
                         << Item(pnlModuleSelector).Width(Factor(1)))
                     << Item().Name("spacerTop").Height(Fixed(100))
-                    << (Pane().Name("mainArea").HorizontalStackLayout(VerticalAlignment.Fill).Height(Factor(1))
+                    << (Pane().Name("mainArea").HorizontalStackLayout(LE.VerticalAlignment.Fill).Height(Factor(1))
                         << Item(pnlMenu)
                         << Item(pnlDialogView).Width(Factor(1))))
                 << Item(pnlDashboard))
                 .Build();
 
-        private ILayoutRoot CreateFillingLayoutWithHwnd()
-            => (CreateRoot((IWin32Window)this, Orientation.Horizontal).Name("root")
-                << (Pane(Orientation.Vertical).Name("nonDashboardArea").Width(Factor(1))
-                    << (Pane().Name("headerArea").HorizontalStackLayout(VerticalAlignment.Top)
-                        << Item((IWin32Window)pnlLogo).Name("pnlLogo").Margin(new Margin(3, 4))
-                        << Item((IWin32Window)pnlModuleSelector).Name("pnlModuleSelector").Margin(new Margin(3, 4)).Width(Factor(1)))
-                    << Item().Name("spacerTop").Height(Fixed(100))
-                    << (Pane(Orientation.Horizontal).Name("mainArea").Height(Factor(1))
-                        << Item((IWin32Window)pnlMenu).Name("pnlMenu").Margin(new Margin(3, 4)).MinimumSize(new Size(200, 400))
-                        << Item((IWin32Window)pnlDialogView).Name("pnlDialogView").Margin(new Margin(3, 4)).MinimumSize(new Size(400, 400)).Width(Factor(1))))
-                << Item((IWin32Window)pnlDashboard).Name("pnlDashboard").Margin(new Margin(3, 4)))
-                .Build();
-
         private ILayoutRoot CreateOverlapLayout()
             => (CreateRoot(this, Orientation.Horizontal)
                 << (Pane(Orientation.Vertical).Width(Factor(1))
-                    << (Pane().HorizontalStackLayout(VerticalAlignment.Top)
+                    << (Pane().HorizontalStackLayout(LE.VerticalAlignment.Top)
                         << Item(pnlLogo)
                         << Item(pnlModuleSelector).Width(Factor(1)))
                     << Pane().Height(Factor(1)).Identifier("a"))
@@ -78,7 +91,7 @@ namespace TestLayoutEngine
                     "a",
                     Pane(Orientation.Vertical)
                     << Item().Height(Factor(1))
-                    << (Pane().HorizontalStackLayout(VerticalAlignment.Center)
+                    << (Pane().HorizontalStackLayout(LE.VerticalAlignment.Center)
                         << Item().Width(Factor(1))
                         << Item(pnlMenu)
                         << Item(pnlDialogView)
@@ -86,16 +99,19 @@ namespace TestLayoutEngine
                     << Item().Height(Factor(1)))
                 .Build();
 
-        private void Form1_VisibleChanged(object sender, System.EventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var minSize = _layoutRoot.ApplyMinimumSize();
             var borderSize = _layoutRoot.Size - _layoutRoot.ClientSize;
-            MinimumSize = minSize + borderSize;
+            var minimumSize = minSize + borderSize;
+            MinWidth = minimumSize.Width;
+            MinHeight = minimumSize.Height;
+            _layoutRoot.Layout();
         }
 
-        private void btnDump_Click(object sender, System.EventArgs e)
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _layoutRoot.DumpLayout();
+            _layoutRoot.Layout();
         }
     }
 }
