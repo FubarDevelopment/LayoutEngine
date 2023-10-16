@@ -1,34 +1,37 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Drawing;
+using System.Runtime.CompilerServices;
 
 using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.AttachedProperties;
 
-public static class AttachedHorizontalAlignment
+public static class AttachedCalculatedMinSize
 {
     private static readonly ConditionalWeakTable<ILayoutItem, PropertyInfo> AttachedProperties = new();
 
-    public static HorizontalAlignment? GetValue(ILayoutItem item)
+    public static Size? GetValue(ILayoutItem item)
     {
         return AttachedProperties.TryGetValue(item, out var value)
-            ? value.Alignment
+            ? value.Size
             : null;
     }
 
-    public static void SetValue(ILayoutItem item, HorizontalAlignment? value)
+    public static void SetValue(ILayoutItem item, Size? value)
     {
         AttachedProperties.Remove(item);
-        if (value != null)
+        if (value is { IsEmpty: false })
+        {
             AttachedProperties.Add(item, new PropertyInfo(value.Value));
+        }
     }
 
     private sealed class PropertyInfo
     {
-        public PropertyInfo(HorizontalAlignment alignment)
+        public PropertyInfo(Size size)
         {
-            Alignment = alignment;
+            Size = size;
         }
 
-        public HorizontalAlignment Alignment { get; }
+        public Size Size { get; }
     }
 }

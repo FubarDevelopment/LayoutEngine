@@ -26,7 +26,7 @@ public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettab
         get => _bounds ??= DetermineDefaultBounds(this, _overlapLookup);
         set => _bounds = new Rectangle(
             new Point(value.Left, value.Top),
-            this.EnsureMaximumSize(this.EnsureMinimumSize(new Size(value.Width, value.Height))));
+            this.EnsureMaximumSize(this.EnsureMinimumSize(new Size(value.Width, value.Height), this.GetEffectiveMinimumSize()), MaximumSize));
     }
     public Size Size => Bounds.Size;
     public Size MinimumSize { get; set; }
@@ -69,7 +69,7 @@ public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettab
 
     private static Rectangle DetermineDefaultBounds(ILayoutContainer container, ILayoutOverlapLookup? overlapLookup)
     {
-        var minimumSize = container.GetMinimumSize(overlapLookup);
+        var minimumSize = container.DetermineMinimumSize(overlapLookup);
         return new Rectangle(
             0, 0,
             minimumSize.Width, minimumSize.Height);

@@ -47,15 +47,20 @@ public static class LayoutItemExtensions
 
         layoutEngine.Layout(subContainer, bounds.Shrink(subContainer.Padding));
         return true;
-
     }
 
-    public static Size GetMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
+    public static Size GetEffectiveMinimumSize(this ILayoutItem item)
+    {
+        var calculatedMinSize = AttachedCalculatedMinSize.GetValue(item);
+        return calculatedMinSize ?? item.MinimumSize;
+    }
+
+    public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
         var result =
             child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.GetMinimumSize(overlapLookup)
-                : GetRawMinimumSize(child, alignment) + child.Padding.Size;
+                ? container.DetermineMinimumSize(overlapLookup)
+                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup == null)
         {
             return result;
@@ -63,18 +68,18 @@ public static class LayoutItemExtensions
 
         var items = overlapLookup.GetOverlappingItemsFor(child);
         var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-        var overlappingMinSize = GetMinimumSize(overlappingItems, overlapLookup, alignment);
+        var overlappingMinSize = DetermineMinimumSize(overlappingItems, overlapLookup, alignment);
         return new Size(
             Math.Max(result.Width, overlappingMinSize.Width),
             Math.Max(result.Height, overlappingMinSize.Height));
     }
 
-    public static Size GetMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
+    public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
         var result =
             child is ILayoutContainer { LayoutEngine: not null } container
-                ? container.GetMinimumSize(overlapLookup)
-                : GetRawMinimumSize(child, alignment) + child.Padding.Size;
+                ? container.DetermineMinimumSize(overlapLookup)
+                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup == null)
         {
             return result;
@@ -82,7 +87,7 @@ public static class LayoutItemExtensions
 
         var items = overlapLookup.GetOverlappingItemsFor(child);
         var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-        var overlappingMinSize = GetMinimumSize(overlappingItems, overlapLookup, alignment);
+        var overlappingMinSize = DetermineMinimumSize(overlappingItems, overlapLookup, alignment);
         return new Size(
             Math.Max(result.Width, overlappingMinSize.Width),
             Math.Max(result.Height, overlappingMinSize.Height));
@@ -93,7 +98,7 @@ public static class LayoutItemExtensions
         var result =
             child is ILayoutContainer { LayoutEngine: not null } container
                 ? container.ApplyMinimumSize(overlapLookup)
-                : GetRawMinimumSize(child, alignment) + child.Padding.Size;
+                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup != null)
         {
             var items = overlapLookup.GetOverlappingItemsFor(child);
@@ -104,10 +109,7 @@ public static class LayoutItemExtensions
                 Math.Max(result.Height, overlappingMinSize.Height));
         }
 
-        if (child is ISettableMinimumSize settableItem)
-        {
-            settableItem.MinimumSize = result;
-        }
+        child.SetCalculatedMinimumSize(result);
 
         return result;
     }
@@ -117,7 +119,7 @@ public static class LayoutItemExtensions
         var result =
             child is ILayoutContainer { LayoutEngine: not null } container
                 ? container.ApplyMinimumSize(overlapLookup)
-                : GetRawMinimumSize(child, alignment) + child.Padding.Size;
+                : DetermineRawMinimumSize(child, alignment) + child.Padding.Size;
         if (overlapLookup != null)
         {
             var items = overlapLookup.GetOverlappingItemsFor(child);
@@ -128,12 +130,14 @@ public static class LayoutItemExtensions
                 Math.Max(result.Height, overlappingMinSize.Height));
         }
 
-        if (child is ISettableMinimumSize settableItem)
-        {
-            settableItem.MinimumSize = result;
-        }
+        child.SetCalculatedMinimumSize(result);
 
         return result;
+    }
+
+    internal static void SetCalculatedMinimumSize(this ILayoutItem item, Size minimumSize)
+    {
+        AttachedCalculatedMinSize.SetValue(item, minimumSize);
     }
 
     internal static IEnumerable<ILayoutItem> GetUncollapsedChildren(this ILayoutContainer container)
@@ -141,14 +145,13 @@ public static class LayoutItemExtensions
         return container.GetChildren().Where(child => child.Visibility != Visibility.Collapsed);
     }
 
-    internal static Size EnsureMaximumSize(this ILayoutItem item, Size size)
+    internal static Size EnsureMaximumSize(this ILayoutItem item, Size size, Size maximumSize)
     {
-        var maxSize = item.MaximumSize;
-        var newWidth = maxSize.Width != 0 && maxSize.Width < size.Width
-            ? maxSize.Width
+        var newWidth = maximumSize.Width != 0 && maximumSize.Width < size.Width
+            ? maximumSize.Width
             : size.Width;
-        var newHeight = maxSize.Height != 0 && maxSize.Height < size.Height
-            ? maxSize.Height
+        var newHeight = maximumSize.Height != 0 && maximumSize.Height < size.Height
+            ? maximumSize.Height
             : size.Height;
         if (size.Width != newWidth || size.Height != newHeight)
         {
@@ -158,12 +161,11 @@ public static class LayoutItemExtensions
         return size;
     }
 
-    internal static Size EnsureMinimumSize(this ILayoutItem item, Size size)
+    internal static Size EnsureMinimumSize(this ILayoutItem item, Size size, Size minimumSize)
     {
-        var minSize = item.MinimumSize;
-        if (minSize.Width > size.Width || minSize.Height > size.Height)
+        if (minimumSize.Width > size.Width || minimumSize.Height > size.Height)
         {
-            return new Size(Math.Max(size.Width, minSize.Width), Math.Max(size.Height, minSize.Height));
+            return new Size(Math.Max(size.Width, minimumSize.Width), Math.Max(size.Height, minimumSize.Height));
         }
 
         return size;
@@ -187,25 +189,25 @@ public static class LayoutItemExtensions
         });
     }
 
-    internal static Size GetMinimumSize(this IEnumerable<ILayoutItem> children, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
+    internal static Size DetermineMinimumSize(this IEnumerable<ILayoutItem> children, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
         return children.Aggregate(new Size(), (acc, item) =>
         {
-            var itemSize = item.GetMinimumSize(overlapLookup, alignment) + item.Margin.Size;
+            var itemSize = item.DetermineMinimumSize(overlapLookup, alignment) + item.Margin.Size;
             return new Size(Math.Max(acc.Width, itemSize.Width), acc.Height + itemSize.Height);
         });
     }
 
-    internal static Size GetMinimumSize(this IEnumerable<ILayoutItem> children, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
+    internal static Size DetermineMinimumSize(this IEnumerable<ILayoutItem> children, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
         return children.Aggregate(new Size(), (acc, item) =>
         {
-            var itemSize = item.GetMinimumSize(overlapLookup, alignment) + item.Margin.Size;
+            var itemSize = item.DetermineMinimumSize(overlapLookup, alignment) + item.Margin.Size;
             return new Size(acc.Width + itemSize.Width, Math.Max(acc.Height, itemSize.Height));
         });
     }
 
-    internal static Size GetRawMinimumSize(this ILayoutItem item, VerticalAlignment alignment)
+    internal static Size DetermineRawMinimumSize(this ILayoutItem item, VerticalAlignment alignment)
     {
         var minWidth = AttachedWidth.GetValue(item) switch
         {
@@ -220,10 +222,10 @@ public static class LayoutItemExtensions
             _ => item.Height,
         };
 
-        return item.EnsureMinimumSize(new Size(minWidth, minHeight));
+        return item.EnsureMinimumSize(new Size(minWidth, minHeight), item.MinimumSize);
     }
 
-    internal static Size GetRawMinimumSize(this ILayoutItem item, HorizontalAlignment alignment)
+    internal static Size DetermineRawMinimumSize(this ILayoutItem item, HorizontalAlignment alignment)
     {
         var minWidth = (AttachedHorizontalAlignment.GetValue(item) ?? alignment) switch
         {
@@ -238,7 +240,7 @@ public static class LayoutItemExtensions
             _ => 0,
         };
 
-        return item.EnsureMinimumSize(new Size(minWidth, minHeight));
+        return item.EnsureMinimumSize(new Size(minWidth, minHeight),  item.MinimumSize);
     }
 
     internal static Rectangle ApplyLayout(

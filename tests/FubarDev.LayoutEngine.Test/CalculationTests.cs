@@ -31,14 +31,47 @@ public class CalculationTests
         var result = root.ApplyMinimumSize();
 
         Assert.Equal(expectedMinSize, result);
-        Assert.Equal(expectedMinSize, root.MinimumSize);
-        Assert.Equal(expectedMinSize, container.MinimumSize);
-        Assert.Equal(expectedMinSize, item.MinimumSize);
+        Assert.Equal(expectedMinSize, root.GetEffectiveMinimumSize());
+        Assert.Equal(expectedMinSize, container.GetEffectiveMinimumSize());
+        Assert.Equal(expectedMinSize, item.GetEffectiveMinimumSize());
     }
-
 
     [Fact]
     public void TestCanShrinkIfElementBecomesInvisible()
+    {
+        var itemMinSize = new Size(100, 100);
+
+        ILayoutContainer container;
+        TestItem item;
+        var root = new TestRoot(HorizontalLayoutEngine)
+        {
+            (container = new TestContainer(VerticalLayoutEngine)
+            {
+                (item = new TestItem()
+                {
+                    MinimumSize = itemMinSize,
+                }),
+            }.SetLayoutWidth(Factor(1))),
+        };
+
+        var result = root.ApplyMinimumSize();
+
+        Assert.Equal(itemMinSize, result);
+        Assert.Equal(itemMinSize, root.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, container.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, item.GetEffectiveMinimumSize());
+
+        var expectedCollapsedSize = new Size();
+        item.Visibility = Visibility.Collapsed;
+        result = root.ApplyMinimumSize();
+        Assert.Equal(expectedCollapsedSize, result);
+        Assert.Equal(expectedCollapsedSize, root.GetEffectiveMinimumSize());
+        Assert.Equal(expectedCollapsedSize, container.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, item.GetEffectiveMinimumSize());
+    }
+
+    [Fact]
+    public void TestCanShrinkIfElementBecomesInvisibleWithLayoutPane()
     {
         var itemMinSize = new Size(100, 100);
 
@@ -58,17 +91,19 @@ public class CalculationTests
         var result = root.ApplyMinimumSize();
 
         Assert.Equal(itemMinSize, result);
-        Assert.Equal(itemMinSize, root.MinimumSize);
-        Assert.Equal(itemMinSize, container.MinimumSize);
-        Assert.Equal(itemMinSize, item.MinimumSize);
+        Assert.Equal(itemMinSize, root.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, container.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, item.GetEffectiveMinimumSize());
 
         var expectedCollapsedSize = new Size();
         item.Visibility = Visibility.Collapsed;
         result = root.ApplyMinimumSize();
         Assert.Equal(expectedCollapsedSize, result);
-        Assert.Equal(expectedCollapsedSize, root.MinimumSize);
-        Assert.Equal(expectedCollapsedSize, container.MinimumSize);
-        Assert.Equal(itemMinSize, item.MinimumSize);
+        Assert.Equal(expectedCollapsedSize, root.GetEffectiveMinimumSize());
+
+        // The LayoutPane becomes collapsed if all its children are collapsed!
+        Assert.Equal(itemMinSize, container.GetEffectiveMinimumSize());
+        Assert.Equal(itemMinSize, item.GetEffectiveMinimumSize());
     }
 
     [Fact]

@@ -39,7 +39,7 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
             newBounds = control.ApplyLayout(newBounds, verticalLayout);
 
             // Respect min & max size
-            var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size));
+            var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size, control.MaximumSize), control.GetEffectiveMinimumSize());
             newBounds = new Rectangle(newBounds.Location, size);
             newSize = size.Width + control.Margin.Horizontal;
 
@@ -66,7 +66,7 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
 
         protected override ElementInfo CalculateElementInfo(ILayoutItem item, int remainingSize, double remainingFactors)
         {
-            var itemMinSize = item.MinimumSize;
+            var itemMinSize = item.GetEffectiveMinimumSize();
             var itemMaxSize = item.MaximumSize;
             int? minSize = itemMinSize.Width != 0 ? itemMinSize.Width : null;
             int? maxSize = itemMaxSize.Width != 0 ? itemMaxSize.Width : null;
@@ -90,8 +90,8 @@ public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
             return controls
                 .Sum(control => AttachedWidth.GetValue(control) switch
                 {
-                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(control.Width, 0)).Width + control.Margin.Horizontal,
-                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(s.Value, 0)).Width + control.Margin.Horizontal,
+                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(control.Width, 0), control.GetEffectiveMinimumSize()).Width + control.Margin.Horizontal,
+                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(s.Value, 0), control.GetEffectiveMinimumSize()).Width + control.Margin.Horizontal,
                     AttachedSize.FactorSize => control.Margin.Horizontal,
                     _ => throw new NotSupportedException(),
                 });

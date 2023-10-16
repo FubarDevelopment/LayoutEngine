@@ -47,13 +47,13 @@ public static class DebugExtensions
 
     private static void DumpLayout(this ILayoutItem item, string prefix, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
-        Debug.WriteLine($"{prefix}{item.Name}: {item.Bounds}, {item.GetMinimumSize(overlapLookup, alignment)}");
+        Debug.WriteLine($"{prefix}{item.Name}: {item.Bounds}, {item.DetermineMinimumSize(overlapLookup, alignment)}");
         (item as ILayoutContainer)?.DumpLayout(prefix, overlapLookup);
     }
 
     private static void DumpLayout(this ILayoutItem item, string prefix, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
-        Debug.WriteLine($"{prefix}{item.Name}: {item.Bounds}, {item.GetMinimumSize(overlapLookup, alignment)}");
+        Debug.WriteLine($"{prefix}{item.Name}: {item.Bounds}, {item.DetermineMinimumSize(overlapLookup, alignment)}");
         (item as ILayoutContainer)?.DumpLayout(prefix, overlapLookup);
     }
 

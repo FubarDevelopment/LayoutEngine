@@ -14,26 +14,26 @@ public static class LayoutContainerExtensions
     /// <param name="container">The container to calculate the minimum size for.</param>
     /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
     /// <returns>The minimum size of the container including its padding.</returns>
-    public static Size GetMinimumSize(
+    public static Size DetermineMinimumSize(
         this ILayoutContainer container,
         ILayoutOverlapLookup? overlapLookup = null)
     {
         var result = container.LayoutEngine switch
         {
-            IHorizontalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
-            IVerticalLayoutEngine e => container.GetMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
-            _ => container.EnsureMinimumSize(new Size()) + container.Padding.Size,
+            IHorizontalLayoutEngine e => container.DetermineMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
+            IVerticalLayoutEngine e => container.DetermineMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
+            _ => container.EnsureMinimumSize(new Size(), container.MinimumSize) + container.Padding.Size,
         };
 
         return result;
     }
 
-    private static Size GetMinimumSize(
+    private static Size DetermineMinimumSize(
         this ILayoutContainer container,
         ILayoutOverlapLookup? overlapLookup,
         VerticalAlignment alignment)
     {
-        var result = container.GetUncollapsedChildren().GetMinimumSize(overlapLookup, alignment);
+        var result = container.GetUncollapsedChildren().DetermineMinimumSize(overlapLookup, alignment);
         if (overlapLookup == null)
         {
             result += container.Padding.Size;
@@ -42,7 +42,7 @@ public static class LayoutContainerExtensions
         {
             var items = overlapLookup.GetOverlappingItemsFor(container);
             var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-            var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
+            var overlappingMinSize = overlappingItems.DetermineMinimumSize(overlapLookup, alignment);
             result = new Size(
                 Math.Max(result.Width, overlappingMinSize.Width),
                 Math.Max(result.Height, overlappingMinSize.Height));
@@ -57,12 +57,12 @@ public static class LayoutContainerExtensions
         return result;
     }
 
-    private static Size GetMinimumSize(
+    private static Size DetermineMinimumSize(
         this ILayoutContainer container,
         ILayoutOverlapLookup? overlapLookup,
         HorizontalAlignment alignment)
     {
-        var result = container.GetUncollapsedChildren().GetMinimumSize(overlapLookup, alignment);
+        var result = container.GetUncollapsedChildren().DetermineMinimumSize(overlapLookup, alignment);
         if (overlapLookup == null)
         {
             result += container.Padding.Size;
@@ -71,7 +71,7 @@ public static class LayoutContainerExtensions
         {
             var items = overlapLookup.GetOverlappingItemsFor(container);
             var overlappingItems = items.Where(x => x.Visibility != Visibility.Collapsed).ToList();
-            var overlappingMinSize = overlappingItems.GetMinimumSize(overlapLookup, alignment);
+            var overlappingMinSize = overlappingItems.DetermineMinimumSize(overlapLookup, alignment);
             result = new Size(
                 Math.Max(result.Width, overlappingMinSize.Width),
                 Math.Max(result.Height, overlappingMinSize.Height));
@@ -94,13 +94,10 @@ public static class LayoutContainerExtensions
         {
             IHorizontalLayoutEngine e => container.ApplyMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
             IVerticalLayoutEngine e => container.ApplyMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
-            _ => container.EnsureMinimumSize(new Size()),
+            _ => container.EnsureMinimumSize(new Size(), container.MinimumSize),
         };
 
-        if (container is ISettableMinimumSize settableItem)
-        {
-            settableItem.MinimumSize = result;
-        }
+        container.SetCalculatedMinimumSize(result);
 
         return result;
     }

@@ -15,7 +15,7 @@ public static class LayoutRootExtensions
     [Pure]
     public static Size GetMinimumClientSize(this ILayoutRoot root)
     {
-        return root.GetMinimumSize(root);
+        return root.DetermineMinimumSize(root);
     }
 
     /// <summary>
@@ -27,10 +27,7 @@ public static class LayoutRootExtensions
     {
         var result = root.ApplyMinimumSize(root);
 
-        if (root is ISettableMinimumSize settableItem)
-        {
-            settableItem.MinimumSize = result;
-        }
+        root.SetCalculatedMinimumSize(result);
 
         return result;
     }

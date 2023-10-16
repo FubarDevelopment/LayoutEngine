@@ -6,7 +6,7 @@ namespace FubarDev.LayoutEngine.AttachedProperties;
 
 public static class AttachedVerticalAlignment
 {
-    private static readonly ConditionalWeakTable<ILayoutItem, AlignmentInfo> AttachedProperties = new();
+    private static readonly ConditionalWeakTable<ILayoutItem, PropertyInfo> AttachedProperties = new();
 
     public static VerticalAlignment? GetValue(ILayoutItem item)
     {
@@ -19,12 +19,12 @@ public static class AttachedVerticalAlignment
     {
         AttachedProperties.Remove(item);
         if (value != null)
-            AttachedProperties.Add(item, new AlignmentInfo(value.Value));
+            AttachedProperties.Add(item, new PropertyInfo(value.Value));
     }
 
-    private sealed class AlignmentInfo
+    private sealed class PropertyInfo
     {
-        public AlignmentInfo(VerticalAlignment alignment)
+        public PropertyInfo(VerticalAlignment alignment)
         {
             Alignment = alignment;
         }

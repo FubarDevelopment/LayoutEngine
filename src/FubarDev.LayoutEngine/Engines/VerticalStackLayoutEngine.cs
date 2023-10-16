@@ -39,7 +39,7 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
             newBounds = control.ApplyLayout(newBounds, horizontalLayout);
 
             // Respect min & max size
-            var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size));
+            var size = control.EnsureMinimumSize(control.EnsureMaximumSize(newBounds.Size, control.MaximumSize), control.GetEffectiveMinimumSize());
             newBounds = new Rectangle(newBounds.Location, size);
             newSize = size.Height + control.Margin.Vertical;
 
@@ -66,7 +66,7 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
 
         protected override ElementInfo CalculateElementInfo(ILayoutItem item, int remainingSize, double remainingFactors)
         {
-            var itemMinSize = item.MinimumSize;
+            var itemMinSize = item.GetEffectiveMinimumSize();
             var itemMaxSize = item.MaximumSize;
             int? minSize = itemMinSize.Height != 0 ? itemMinSize.Height : null;
             int? maxSize = itemMaxSize.Height != 0 ? itemMaxSize.Height : null;
@@ -90,8 +90,8 @@ public class VerticalStackLayoutEngine : IVerticalLayoutEngine
             return controls
                 .Sum(control => AttachedHeight.GetValue(control) switch
                 {
-                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(0, control.Height)).Height + control.Margin.Vertical,
-                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(0, s.Value)).Height + control.Margin.Vertical,
+                    AttachedSize.UnchangedSize => control.EnsureMinimumSize(new Size(0, control.Height), control.GetEffectiveMinimumSize()).Height + control.Margin.Vertical,
+                    AttachedSize.FixedSize s => control.EnsureMinimumSize(new Size(0, s.Value), control.GetEffectiveMinimumSize()).Height + control.Margin.Vertical,
                     AttachedSize.FactorSize => control.Margin.Vertical,
                     _ => throw new NotSupportedException(),
                 });
