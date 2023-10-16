@@ -94,7 +94,7 @@ public static class LayoutContainerExtensions
         {
             IHorizontalLayoutEngine e => container.ApplyMinimumSize(overlapLookup, e.DefaultVerticalAlignment),
             IVerticalLayoutEngine e => container.ApplyMinimumSize(overlapLookup, e.DefaultHorizontalAlignment),
-            _ => container.EnsureMinimumSize(new Size(), container.MinimumSize),
+            _ => container.EnsureMinimumSize(new Size(), container.MinimumSize) + container.Padding.Size,
         };
 
         container.SetCalculatedMinimumSize(result);
