@@ -107,6 +107,12 @@ public class LayoutBuilderRoot
         return this;
     }
 
+    public static LayoutBuilderRoot operator <<(LayoutBuilderRoot root, LayoutBuilderRoot item)
+    {
+        root._root.Add(item.Build());
+        return root;
+    }
+
     public static LayoutBuilderRoot operator <<(LayoutBuilderRoot root, LayoutBuilderContainer item)
     {
         root._root.Add(item.Build(root._root));

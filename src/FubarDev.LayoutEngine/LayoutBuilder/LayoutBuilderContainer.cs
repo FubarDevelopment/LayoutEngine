@@ -187,6 +187,24 @@ public sealed class LayoutBuilderContainer
         return this;
     }
 
+    public static LayoutBuilderContainer operator <<(LayoutBuilderContainer container, LayoutBuilderRoot item)
+    {
+        if (container._container != null)
+        {
+            throw new InvalidOperationException("Cannot modify after building.");
+        }
+
+        var oldFactory = container._containerFactory;
+        container._containerFactory = overlapLookup =>
+        {
+            var newContainer = oldFactory(overlapLookup);
+            newContainer.Add(item.Build());
+            return newContainer;
+        };
+
+        return container;
+    }
+
     public static LayoutBuilderContainer operator <<(LayoutBuilderContainer container, LayoutBuilderContainer item)
     {
         if (container._container != null)
