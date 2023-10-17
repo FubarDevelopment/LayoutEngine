@@ -43,13 +43,13 @@ public class LayoutBuilderRoot
         return this;
     }
 
-    public LayoutBuilderRoot SetDefaultAlignment(HorizontalAlignment alignment)
+    public LayoutBuilderRoot VerticalStackLayout(HorizontalAlignment alignment)
     {
         _root.LayoutEngine = new VerticalStackLayoutEngine(alignment);
         return this;
     }
 
-    public LayoutBuilderRoot SetDefaultAlignment(VerticalAlignment alignment)
+    public LayoutBuilderRoot HorizontalStackLayout(VerticalAlignment alignment)
     {
         _root.LayoutEngine = new HorizontalStackLayoutEngine(alignment);
         return this;
@@ -58,6 +58,30 @@ public class LayoutBuilderRoot
     public LayoutBuilderRoot Identifier(string identifier)
     {
         AttachedIdentifier.SetValue(_root, identifier);
+        return this;
+    }
+    
+    public LayoutBuilderRoot HorizontalAlignment(HorizontalAlignment alignment)
+    {
+        _root.SetHorizontalAlignment(alignment);
+        return this;
+    }
+
+    public LayoutBuilderRoot VerticalAlignment(VerticalAlignment alignment)
+    {
+        _root.SetVerticalAlignment(alignment);
+        return this;
+    }
+
+    public LayoutBuilderRoot Width(AttachedSize width)
+    {
+        _root.SetLayoutWidth(width);
+        return this;
+    }
+
+    public LayoutBuilderRoot Height(AttachedSize height)
+    {
+        _root.SetLayoutHeight(height);
         return this;
     }
 
