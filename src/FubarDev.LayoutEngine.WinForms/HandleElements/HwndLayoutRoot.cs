@@ -19,6 +19,8 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
         RootWindow = window;
     }
 
+    public override Rectangle Bounds => GetBounds(Handle);
+
     public Size ClientSize => GetClientRect(Handle).Size;
     public Rectangle DisplayRectangle => GetDisplayRectangle(Handle);
 
