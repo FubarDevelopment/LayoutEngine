@@ -1,9 +1,11 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+
+using Equatable.Attributes;
 
 namespace FubarDev.LayoutEngine;
 
-public struct Margin
+[Equatable]
+public partial struct Margin
 {
     private bool _all;
     private int _top;
@@ -34,6 +36,7 @@ public struct Margin
         _all = _top == _left && _top == _right && _top == _bottom;
     }
 
+    [IgnoreEquality]
     public int All
     {
         get => _all ? _top : -1;
@@ -101,25 +104,18 @@ public struct Margin
         }
     }
 
+    [IgnoreEquality]
     public int Horizontal => Left + Right;
 
+    [IgnoreEquality]
     public int Vertical => Top + Bottom;
 
+    [IgnoreEquality]
     public Size Size => new Size(Horizontal, Vertical);
 
     public static Margin Add(Margin p1, Margin p2) => p1 + p2;
 
     public static Margin Subtract(Margin p1, Margin p2) => p1 - p2;
-
-    public override bool Equals(object? other)
-    {
-        if (!(other is Margin otherPadding))
-        {
-            return false;
-        }
-
-        return this == otherPadding;
-    }
 
     /// <summary>
     ///  Performs vector addition of two <see cref='Margin'/> objects.
@@ -136,21 +132,6 @@ public struct Margin
     {
         return new Margin(p1.Left - p2.Left, p1.Top - p2.Top, p1.Right - p2.Right, p1.Bottom - p2.Bottom);
     }
-
-    /// <summary>
-    ///  Tests whether two <see cref='Margin'/> objects are identical.
-    /// </summary>
-    public static bool operator ==(Margin p1, Margin p2)
-    {
-        return p1.Left == p2.Left && p1.Top == p2.Top && p1.Right == p2.Right && p1.Bottom == p2.Bottom;
-    }
-
-    /// <summary>
-    ///  Tests whether two <see cref='Margin'/> objects are different.
-    /// </summary>
-    public static bool operator !=(Margin p1, Margin p2) => !(p1 == p2);
-
-    public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
     public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
 }
