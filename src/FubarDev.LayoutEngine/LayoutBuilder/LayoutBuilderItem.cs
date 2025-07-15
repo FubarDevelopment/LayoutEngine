@@ -6,6 +6,10 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.LayoutBuilder;
 
+/// <summary>
+/// Provides a builder for creating and configuring layout items.
+/// </summary>
+/// <param name="itemFactory">The factory function to create the item.</param>
 public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> itemFactory)
 {
     private Func<ILayoutOverlapLookup, ILayoutItem> _itemFactory = itemFactory;
@@ -13,6 +17,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
 
     internal ILayoutItem Build(ILayoutOverlapLookup overlapLookup) => _item ??= _itemFactory(overlapLookup);
 
+    /// <summary>
+    /// Sets the name of the item.
+    /// </summary>
     public LayoutBuilderItem Name(string name)
     {
         var oldFactory = _itemFactory;
@@ -26,6 +33,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the minimum size of the item.
+    /// </summary>
     public LayoutBuilderItem MinimumSize(Size value)
     {
         var oldFactory = _itemFactory;
@@ -39,6 +49,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the margin of the item.
+    /// </summary>
     public LayoutBuilderItem Margin(Margin value)
     {
         var oldFactory = _itemFactory;
@@ -52,6 +65,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding of the item.
+    /// </summary>
     public LayoutBuilderItem Padding(Margin value)
     {
         var oldFactory = _itemFactory;
@@ -65,6 +81,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the identifier for the item.
+    /// </summary>
     public LayoutBuilderItem Identifier(string identifier)
     {
         if (_item != null)
@@ -83,6 +102,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the horizontal alignment for the item.
+    /// </summary>
     public LayoutBuilderItem HorizontalAlignment(HorizontalAlignment alignment)
     {
         if (_item != null)
@@ -101,6 +123,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the vertical alignment for the item.
+    /// </summary>
     public LayoutBuilderItem VerticalAlignment(VerticalAlignment alignment)
     {
         if (_item != null)
@@ -119,6 +144,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the width for the item.
+    /// </summary>
     public LayoutBuilderItem Width(AttachedSize width)
     {
         if (_item != null)
@@ -137,6 +165,9 @@ public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> it
         return this;
     }
 
+    /// <summary>
+    /// Sets the height for the item.
+    /// </summary>
     public LayoutBuilderItem Height(AttachedSize height)
     {
         if (_item != null)

@@ -9,11 +9,17 @@ using FubarDev.LayoutEngine.LayoutCalculation;
 
 namespace FubarDev.LayoutEngine.Engines;
 
+/// <summary>
+/// Provides a vertical stack layout engine for arranging items vertically.
+/// </summary>
+/// <param name="defaultAlignment">The default horizontal alignment for items in the layout.</param>
 public class VerticalStackLayoutEngine(HorizontalAlignment defaultAlignment = LayoutPane.DefaultHorizontalAlignment)
     : IVerticalLayoutEngine
 {
+    /// <inheritdoc />
     public HorizontalAlignment DefaultHorizontalAlignment { get; } = defaultAlignment;
 
+    /// <inheritdoc />
     public void Layout(ILayoutContainer container, Rectangle bounds)
     {
         var children = container.GetUncollapsedChildren()

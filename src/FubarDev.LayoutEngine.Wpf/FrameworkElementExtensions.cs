@@ -8,8 +8,16 @@ using Size = System.Drawing.Size;
 
 namespace FubarDev.LayoutEngine;
 
+/// <summary>
+/// Provides extension methods for <see cref="FrameworkElement"/> to retrieve layout information.
+/// </summary>
 public static class FrameworkElementExtensions
 {
+    /// <summary>
+    /// Gets the client size of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="element">The framework element.</param>
+    /// <returns>The client size as a <see cref="Size"/>.</returns>
     public static Size GetClientSize(this FrameworkElement element)
     {
         return element switch
@@ -22,6 +30,11 @@ public static class FrameworkElementExtensions
         };
     }
 
+    /// <summary>
+    /// Gets the display rectangle of the specified <see cref="FrameworkElement"/>.
+    /// </summary>
+    /// <param name="element">The framework element.</param>
+    /// <returns>The display rectangle as a <see cref="Rectangle"/>.</returns>
     public static Rectangle GetDisplayRectangle(this FrameworkElement element)
     {
         var result = element switch

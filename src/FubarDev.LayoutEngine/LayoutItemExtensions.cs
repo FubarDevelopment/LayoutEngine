@@ -8,8 +8,18 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine;
 
+/// <summary>
+/// Provides extension methods for layout items to set properties and calculate minimum sizes.
+/// </summary>
 public static class LayoutItemExtensions
 {
+    /// <summary>
+    /// Sets the attached width for the layout item.
+    /// </summary>
+    /// <typeparam name="T">The type of the layout item.</typeparam>
+    /// <param name="control">The layout item.</param>
+    /// <param name="size">The attached size value.</param>
+    /// <returns>The layout item.</returns>
     public static T SetLayoutWidth<T>(this T control, AttachedSize size)
         where T : ILayoutItem
     {
@@ -17,6 +27,13 @@ public static class LayoutItemExtensions
         return control;
     }
 
+    /// <summary>
+    /// Sets the attached height for the layout item.
+    /// </summary>
+    /// <typeparam name="T">The type of the layout item.</typeparam>
+    /// <param name="control">The layout item.</param>
+    /// <param name="size">The attached size value.</param>
+    /// <returns>The layout item.</returns>
     public static T SetLayoutHeight<T>(this T control, AttachedSize size)
         where T : ILayoutItem
     {
@@ -24,6 +41,13 @@ public static class LayoutItemExtensions
         return control;
     }
 
+    /// <summary>
+    /// Sets the horizontal alignment for the layout item.
+    /// </summary>
+    /// <typeparam name="T">The type of the layout item.</typeparam>
+    /// <param name="control">The layout item.</param>
+    /// <param name="alignment">The horizontal alignment value.</param>
+    /// <returns>The layout item.</returns>
     public static T SetHorizontalAlignment<T>(this T control, HorizontalAlignment alignment)
         where T : ILayoutItem
     {
@@ -31,6 +55,13 @@ public static class LayoutItemExtensions
         return control;
     }
 
+    /// <summary>
+    /// Sets the vertical alignment for the layout item.
+    /// </summary>
+    /// <typeparam name="T">The type of the layout item.</typeparam>
+    /// <param name="control">The layout item.</param>
+    /// <param name="alignment">The vertical alignment value.</param>
+    /// <returns>The layout item.</returns>
     public static T SetVerticalAlignment<T>(this T control, VerticalAlignment alignment)
         where T : ILayoutItem
     {
@@ -38,6 +69,12 @@ public static class LayoutItemExtensions
         return control;
     }
 
+    /// <summary>
+    /// Attempts to layout the item using the specified bounds.
+    /// </summary>
+    /// <param name="item">The layout item.</param>
+    /// <param name="bounds">The bounds to use for layout.</param>
+    /// <returns>True if layout was performed; otherwise, false.</returns>
     public static bool TryLayout(this ILayoutItem item, Rectangle bounds)
     {
         switch (item)
@@ -53,12 +90,24 @@ public static class LayoutItemExtensions
         return false;
     }
 
+    /// <summary>
+    /// Gets the effective minimum size for the layout item.
+    /// </summary>
+    /// <param name="item">The layout item.</param>
+    /// <returns>The effective minimum size.</returns>
     public static Size GetEffectiveMinimumSize(this ILayoutItem item)
     {
         var calculatedMinSize = AttachedCalculatedMinSize.GetValue(item);
         return calculatedMinSize ?? item.MinimumSize;
     }
 
+    /// <summary>
+    /// Determines the minimum size for the layout item using vertical alignment.
+    /// </summary>
+    /// <param name="child">The layout item.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <param name="alignment">The vertical alignment value.</param>
+    /// <returns>The minimum size for the item.</returns>
     public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
         var result = child switch
@@ -81,6 +130,13 @@ public static class LayoutItemExtensions
             Math.Max(result.Height, overlappingMinSize.Height));
     }
 
+    /// <summary>
+    /// Determines the minimum size for the layout item using horizontal alignment.
+    /// </summary>
+    /// <param name="child">The layout item.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <param name="alignment">The horizontal alignment value.</param>
+    /// <returns>The minimum size for the item.</returns>
     public static Size DetermineMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
         var result = child switch
@@ -103,6 +159,13 @@ public static class LayoutItemExtensions
             Math.Max(result.Height, overlappingMinSize.Height));
     }
 
+    /// <summary>
+    /// Applies the minimum size for the layout item using vertical alignment.
+    /// </summary>
+    /// <param name="child">The layout item.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <param name="alignment">The vertical alignment value.</param>
+    /// <returns>The applied minimum size for the item.</returns>
     public static Size ApplyMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, VerticalAlignment alignment)
     {
         var result = child switch
@@ -127,6 +190,13 @@ public static class LayoutItemExtensions
         return result;
     }
 
+    /// <summary>
+    /// Applies the minimum size for the layout item using horizontal alignment.
+    /// </summary>
+    /// <param name="child">The layout item.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <param name="alignment">The horizontal alignment value.</param>
+    /// <returns>The applied minimum size for the item.</returns>
     public static Size ApplyMinimumSize(this ILayoutItem child, ILayoutOverlapLookup? overlapLookup, HorizontalAlignment alignment)
     {
         var result = child switch

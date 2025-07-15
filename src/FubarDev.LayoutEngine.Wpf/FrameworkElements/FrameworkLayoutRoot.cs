@@ -11,15 +11,22 @@ using Size = System.Drawing.Size;
 
 namespace FubarDev.LayoutEngine.FrameworkElements;
 
+/// <summary>
+/// Represents the root of a layout tree for WPF framework elements.
+/// </summary>
+/// <param name="element">The framework element to use as the root of the layout tree.</param>
 public class FrameworkLayoutRoot(FrameworkElement element) : FrameworkLayoutContainer(element), ILayoutRoot
 {
     private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
 
+    /// <inheritdoc />
     public Size ClientSize => GetClientSize(Element);
 
+    /// <inheritdoc />
     public Rectangle DisplayRectangle => GetDisplayRectangle(Element);
 
+    /// <inheritdoc />
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
     {
         if (_overlaps.TryGetValue(item, out var overlaps))
@@ -30,6 +37,7 @@ public class FrameworkLayoutRoot(FrameworkElement element) : FrameworkLayoutCont
         return EmptyItems;
     }
 
+    /// <inheritdoc />
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
@@ -41,6 +49,7 @@ public class FrameworkLayoutRoot(FrameworkElement element) : FrameworkLayoutCont
         overlaps.Add(overlap);
     }
 
+    /// <inheritdoc />
     public void Layout()
     {
         if (LayoutEngine == null)

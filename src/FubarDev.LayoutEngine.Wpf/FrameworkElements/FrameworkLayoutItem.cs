@@ -10,23 +10,38 @@ using Size = System.Drawing.Size;
 
 namespace FubarDev.LayoutEngine.FrameworkElements;
 
+/// <summary>
+/// Represents a layout item for WPF framework elements.
+/// </summary>
+/// <param name="element">The framework element to be wrapped as a layout item.</param>
 public class FrameworkLayoutItem(FrameworkElement element)
     : ILayoutItem, ISettableMargin, ISettableMinimumSize, ISettablePadding
 {
     private readonly Control? _control = element as Control;
     private Margin _padding;
 
+    /// <summary>
+    /// Gets the wrapped framework element.
+    /// </summary>
     public FrameworkElement Element { get; } = element;
 
+    /// <inheritdoc />
     public string? Name
     {
         get => Element.Name;
         set => Element.Name = value;
     }
 
+    /// <inheritdoc />
     public Point Location => Bounds.Location;
+
+    /// <inheritdoc />
     public Rectangle Bounds => new((int)Element.Margin.Left, (int)Element.Margin.Top, (int)Element.ActualWidth, (int)Element.ActualHeight);
+
+    /// <inheritdoc />
     public Size Size => Bounds.Size;
+
+    /// <inheritdoc cref="ILayoutItem.MinimumSize" />
     public Size MinimumSize
     {
         get => new((int)Element.MinWidth, (int)Element.MinHeight);
@@ -37,12 +52,18 @@ public class FrameworkLayoutItem(FrameworkElement element)
         }
     }
 
+    /// <inheritdoc />
     public Size MaximumSize => new(
         double.IsPositiveInfinity(Element.MaxWidth) ? 0 : (int)Element.MaxWidth,
         double.IsPositiveInfinity(Element.MaxHeight) ? 0 : (int)Element.MaxHeight);
+
+    /// <inheritdoc />
     public int Width => Bounds.Width;
+
+    /// <inheritdoc />
     public int Height => Bounds.Height;
 
+    /// <inheritdoc />
     public Visibility Visibility => Element.Visibility switch
     {
         System.Windows.Visibility.Visible => Visibility.Visible,
@@ -51,14 +72,17 @@ public class FrameworkLayoutItem(FrameworkElement element)
         _ => throw new NotSupportedException(),
     };
 
+    /// <inheritdoc cref="ILayoutItem.Margin" />
     public Margin Margin { get; set; }
 
+    /// <inheritdoc cref="ILayoutItem.Padding" />
     public Margin Padding
     {
         get => GetPadding();
         set => SetPadding(value);
     }
 
+    /// <inheritdoc />
     public void SetBounds(Rectangle bounds)
     {
         Element.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;

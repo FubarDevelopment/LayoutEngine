@@ -5,6 +5,9 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine;
 
+/// <summary>
+/// Provides extension methods for layout root elements to calculate and apply minimum sizes.
+/// </summary>
 public static class LayoutRootExtensions
 {
     /// <summary>

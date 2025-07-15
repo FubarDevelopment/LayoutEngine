@@ -7,6 +7,11 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.HandleElements;
 
+/// <summary>
+/// Represents a layout item for native Win32 windows.
+/// </summary>
+/// <param name="window">The window associated with this layout item.</param>
+/// <param name="hiddenVisibility">The visibility state when the window is hidden.</param>
 public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
     : ILayoutItem, ISettableMinimumSize, ISettableMargin, ISettablePadding
 {
@@ -15,6 +20,9 @@ public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = V
     private Rectangle? _bounds;
     private IWin32Window? _rootWindow;
 
+    /// <summary>
+    /// Gets the handle of the window associated with this layout item.
+    /// </summary>
     protected IntPtr Handle => _handle ??= window.Handle;
 
     internal IWin32Window RootWindow
@@ -23,8 +31,13 @@ public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = V
         set => _rootWindow = value;
     }
 
+    /// <inheritdoc />
     public string? Name { get; set; }
+    
+    /// <inheritdoc />
     public Point Location => Bounds.Location;
+    
+    /// <inheritdoc />
     public virtual Rectangle Bounds
     {
         get
@@ -36,20 +49,35 @@ public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = V
         }
     }
 
+    /// <inheritdoc />
     public Size Size => Bounds.Size;
+    
+    /// <inheritdoc cref="ILayoutItem.MinimumSize" />
     public Size MinimumSize
     {
         get => _minimumSize ?? GetMinSize();
         set => _minimumSize = value;
     }
 
+    /// <inheritdoc />
     public Size MaximumSize { get; } = new();
+    
+    /// <inheritdoc />
     public int Width => Bounds.Width;
+    
+    /// <inheritdoc />
     public int Height => Bounds.Height;
+    
+    /// <inheritdoc />
     public Visibility Visibility => GetVisibility(Handle, hiddenVisibility);
+
+    /// <inheritdoc cref="ILayoutItem.Margin" />
     public Margin Margin { get; set; }
+
+    /// <inheritdoc cref="ILayoutItem.Padding" />
     public Margin Padding { get; set; }
 
+    /// <inheritdoc />
     public void SetBounds(Rectangle bounds)
     {
         if (_bounds != null)
@@ -74,6 +102,11 @@ public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = V
         _bounds = bounds;
     }
 
+    /// <summary>
+    /// Gets the bounds of the specified window handle.
+    /// </summary>
+    /// <param name="handle">The window handle.</param>
+    /// <returns>The bounds as a <see cref="Rectangle"/>.</returns>
     protected static Rectangle GetBounds(IntPtr handle)
     {
         if (!WindowsApi.GetWindowRect(handle, out var rect))

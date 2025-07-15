@@ -7,14 +7,22 @@ using FubarDev.LayoutEngine.HandleElements;
 
 namespace FubarDev.LayoutEngine.ControlElements;
 
+/// <summary>
+/// Represents the root of a layout tree for Windows Forms controls.
+/// </summary>
+/// <param name="control">The control that serves as the root of the layout tree.</param>
 public class ControlLayoutRoot(Control control) : ControlLayoutContainer(control), ILayoutRoot
 {
     private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
 
+    /// <inheritdoc />
     public Size ClientSize => Control.ClientSize;
+    
+    /// <inheritdoc />
     public Rectangle DisplayRectangle => Control.DisplayRectangle;
 
+    /// <inheritdoc />
     public override void Add(ILayoutItem item)
     {
         base.Add(item);
@@ -22,6 +30,7 @@ public class ControlLayoutRoot(Control control) : ControlLayoutContainer(control
         SetRootWindow(Control, item);
     }
 
+    /// <inheritdoc />
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
@@ -35,6 +44,7 @@ public class ControlLayoutRoot(Control control) : ControlLayoutContainer(control
         SetRootWindow(Control, overlap);
     }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
     {
         if (_overlaps.TryGetValue(item, out var overlaps))
@@ -45,6 +55,7 @@ public class ControlLayoutRoot(Control control) : ControlLayoutContainer(control
         return EmptyItems;
     }
 
+    /// <inheritdoc />
     public void Layout()
     {
         if (LayoutEngine == null)

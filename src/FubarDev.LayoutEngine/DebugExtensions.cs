@@ -5,15 +5,21 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine;
 
+/// <summary>
+/// Provides debugging extension methods for layout items and containers.
+/// </summary>
 public static class DebugExtensions
 {
+    /// <summary>
+    /// Dumps the layout information of the specified layout root to the debug output.
+    /// </summary>
+    /// <param name="item">The layout root to dump.</param>
     [Conditional("DEBUG")]
     public static void DumpLayout(this ILayoutRoot item)
     {
         Debug.WriteLine($"{item.Name}: {item.Bounds}, {item.GetMinimumClientSize()}");
         item.DumpLayout(string.Empty, item);
     }
-
 
     private static void DumpLayout(this ILayoutItem item, string prefix, ILayoutOverlapLookup? overlapLookup)
     {

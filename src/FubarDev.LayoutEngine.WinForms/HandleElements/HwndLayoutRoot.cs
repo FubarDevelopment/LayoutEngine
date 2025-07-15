@@ -8,22 +8,34 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.HandleElements;
 
+/// <summary>
+/// Represents the root of a layout tree for native Win32 windows.
+/// </summary>
 public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
 {
     private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HwndLayoutRoot"/> class with the specified window.
+    /// </summary>
+    /// <param name="window">The window to be wrapped as a layout root.</param>
     public HwndLayoutRoot(IWin32Window window)
         : base(window)
     {
         RootWindow = window;
     }
 
+    /// <inheritdoc />
     public override Rectangle Bounds => GetBounds(Handle);
 
+    /// <inheritdoc />
     public Size ClientSize => GetClientRect(Handle).Size;
+
+    /// <inheritdoc />
     public Rectangle DisplayRectangle => GetDisplayRectangle(Handle);
 
+    /// <inheritdoc />
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
@@ -37,6 +49,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
         SetRootWindow(RootWindow, overlap);
     }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<ILayoutItem> GetOverlappingItemsFor(ILayoutItem item)
     {
         if (_overlaps.TryGetValue(item, out var overlaps))
@@ -47,6 +60,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
         return EmptyItems;
     }
 
+    /// <inheritdoc />
     public void Layout()
     {
         if (LayoutEngine == null)
@@ -68,6 +82,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
         }
     }
 
+    /// <inheritdoc />
     protected override void SetRootWindow(ILayoutItem item)
     {
         SetRootWindow(RootWindow, item);

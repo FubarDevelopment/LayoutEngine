@@ -6,6 +6,9 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine;
 
+/// <summary>
+/// Provides extension methods for layout containers to calculate and apply minimum sizes.
+/// </summary>
 public static class LayoutContainerExtensions
 {
     /// <summary>
@@ -86,6 +89,12 @@ public static class LayoutContainerExtensions
         return result;
     }
 
+    /// <summary>
+    /// Calculates and applies the minimum size for the container, including its padding.
+    /// </summary>
+    /// <param name="container">The container to apply the minimum size to.</param>
+    /// <param name="overlapLookup">The lookup service for overlapping layout items.</param>
+    /// <returns>The minimum size of the container including its padding.</returns>
     public static Size ApplyMinimumSize(
         this ILayoutContainer container,
         ILayoutOverlapLookup? overlapLookup = null)
