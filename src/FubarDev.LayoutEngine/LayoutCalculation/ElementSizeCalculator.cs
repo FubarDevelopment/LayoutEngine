@@ -5,19 +5,10 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.LayoutCalculation;
 
-internal abstract class ElementSizeCalculator
+internal abstract class ElementSizeCalculator(
+    int availableSizeForFactors,
+    double factorSum)
 {
-    private readonly int _availableSizeForFactors;
-    private readonly double _factorSum;
-
-    protected ElementSizeCalculator(
-        int availableSizeForFactors,
-        double factorSum)
-    {
-        _availableSizeForFactors = availableSizeForFactors;
-        _factorSum = factorSum;
-    }
-
     protected abstract ElementInfo CalculateElementInfo(
         ILayoutItem item,
         int remainingSize,
@@ -25,8 +16,8 @@ internal abstract class ElementSizeCalculator
 
     public Dictionary<ILayoutItem, int> Calculate(IReadOnlyCollection<ILayoutItem> children)
     {
-        var factorSizeRemaining = _availableSizeForFactors;
-        var factorSumRemaining = _factorSum;
+        var factorSizeRemaining = availableSizeForFactors;
+        var factorSumRemaining = factorSum;
         var firstCalculationElements = children
             .Select(x => CalculateElementInfo(x, factorSizeRemaining, factorSumRemaining))
             .ToList();

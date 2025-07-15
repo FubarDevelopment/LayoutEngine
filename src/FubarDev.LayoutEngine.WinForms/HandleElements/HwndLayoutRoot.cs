@@ -10,7 +10,7 @@ namespace FubarDev.LayoutEngine.HandleElements;
 
 public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
 {
-    private static readonly ILayoutItem[] EmptyItems = Array.Empty<ILayoutItem>();
+    private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
 
     public HwndLayoutRoot(IWin32Window window)
@@ -28,7 +28,7 @@ public class HwndLayoutRoot : HwndLayoutContainer, ILayoutRoot
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
         {
-            overlaps = new();
+            overlaps = [];
             _overlaps.Add(item, overlaps);
         }
 

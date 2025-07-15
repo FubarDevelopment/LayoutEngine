@@ -7,9 +7,6 @@ using FubarDev.LayoutEngine.Engines;
 using FubarDev.LayoutEngine.FrameworkElements;
 using FubarDev.LayoutEngine.LayoutBuilder;
 
-using VerticalAlignment = FubarDev.LayoutEngine.VerticalAlignment;
-using HorizontalAlignment = FubarDev.LayoutEngine.HorizontalAlignment;
-
 namespace FubarDev.LayoutEngine;
 
 public static class WpfBuilderMethods

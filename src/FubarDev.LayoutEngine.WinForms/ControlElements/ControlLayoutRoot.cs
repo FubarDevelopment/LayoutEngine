@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,15 +7,10 @@ using FubarDev.LayoutEngine.HandleElements;
 
 namespace FubarDev.LayoutEngine.ControlElements;
 
-public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
+public class ControlLayoutRoot(Control control) : ControlLayoutContainer(control), ILayoutRoot
 {
-    private static readonly ILayoutItem[] EmptyItems = Array.Empty<ILayoutItem>();
+    private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
-
-    public ControlLayoutRoot(Control control)
-        : base(control)
-    {
-    }
 
     public Size ClientSize => Control.ClientSize;
     public Rectangle DisplayRectangle => Control.DisplayRectangle;
@@ -32,7 +26,7 @@ public class ControlLayoutRoot : ControlLayoutContainer, ILayoutRoot
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
         {
-            overlaps = new();
+            overlaps = [];
             _overlaps.Add(item, overlaps);
         }
 

@@ -8,7 +8,7 @@ namespace FubarDev.LayoutEngine.HandleElements;
 
 public class HwndLayoutContainer : HwndLayoutItem, ILayoutContainer
 {
-    private List<ILayoutItem> _children = new();
+    private List<ILayoutItem> _children = [];
 
     public HwndLayoutContainer(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
         : base(window, hiddenVisibility)

@@ -7,15 +7,10 @@ using FubarDev.LayoutEngine.Engines;
 
 namespace FubarDev.LayoutEngine.LayoutBuilder;
 
-public sealed class LayoutBuilderContainer
+public sealed class LayoutBuilderContainer(Func<ILayoutOverlapLookup, ILayoutContainer> containerFactory)
 {
-    private Func<ILayoutOverlapLookup, ILayoutContainer> _containerFactory;
+    private Func<ILayoutOverlapLookup, ILayoutContainer> _containerFactory = containerFactory;
     private ILayoutContainer? _container;
-
-    public LayoutBuilderContainer(Func<ILayoutOverlapLookup, ILayoutContainer> containerFactory)
-    {
-        _containerFactory = containerFactory;
-    }
 
     internal ILayoutContainer Build(ILayoutOverlapLookup overlapLookup) => _container ??= _containerFactory(overlapLookup);
 

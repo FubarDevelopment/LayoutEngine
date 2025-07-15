@@ -10,18 +10,13 @@ using Size = System.Drawing.Size;
 
 namespace FubarDev.LayoutEngine.FrameworkElements;
 
-public class FrameworkLayoutItem : ILayoutItem, ISettableMargin, ISettableMinimumSize, ISettablePadding
+public class FrameworkLayoutItem(FrameworkElement element)
+    : ILayoutItem, ISettableMargin, ISettableMinimumSize, ISettablePadding
 {
-    private readonly Control? _control;
+    private readonly Control? _control = element as Control;
     private Margin _padding;
 
-    public FrameworkLayoutItem(FrameworkElement element)
-    {
-        Element = element;
-        _control = element as Control;
-    }
-
-    public FrameworkElement Element { get; }
+    public FrameworkElement Element { get; } = element;
 
     public string? Name
     {

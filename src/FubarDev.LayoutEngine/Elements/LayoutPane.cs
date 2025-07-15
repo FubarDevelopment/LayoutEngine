@@ -5,18 +5,13 @@ using System.Linq;
 
 namespace FubarDev.LayoutEngine.Elements;
 
-public class LayoutPane : ILayoutContainer, ISettableMinimumSize, ISettableMargin, ISettablePadding, IEnumerable<ILayoutItem>
+public class LayoutPane(ILayoutOverlapLookup? overlapLookup = null) : ILayoutContainer, ISettableMinimumSize,
+    ISettableMargin, ISettablePadding, IEnumerable<ILayoutItem>
 {
     public const HorizontalAlignment DefaultHorizontalAlignment = HorizontalAlignment.Fill;
     public const VerticalAlignment DefaultVerticalAlignment = VerticalAlignment.Fill;
-    private readonly ILayoutOverlapLookup? _overlapLookup;
-    private List<ILayoutItem> _children = new();
+    private List<ILayoutItem> _children = [];
     private Rectangle? _bounds;
-
-    public LayoutPane(ILayoutOverlapLookup? overlapLookup = null)
-    {
-        _overlapLookup = overlapLookup;
-    }
 
     public LayoutPane(ILayoutEngine layoutEngine, ILayoutOverlapLookup? overlapLookup = null)
         : this(overlapLookup)
@@ -29,7 +24,7 @@ public class LayoutPane : ILayoutContainer, ISettableMinimumSize, ISettableMargi
 
     public Rectangle Bounds
     {
-        get => _bounds ??= DetermineDefaultBounds(this, _overlapLookup);
+        get => _bounds ??= DetermineDefaultBounds(this, overlapLookup);
         private set => _bounds = new Rectangle(
             new Point(value.Left, value.Top),
             this.EnsureMaximumSize(this.EnsureMinimumSize(new Size(value.Width, value.Height), this.GetEffectiveMinimumSize()), MaximumSize));

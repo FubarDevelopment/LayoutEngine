@@ -6,15 +6,10 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.LayoutBuilder;
 
-public sealed class LayoutBuilderItem
+public sealed class LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> itemFactory)
 {
-    private Func<ILayoutOverlapLookup, ILayoutItem> _itemFactory;
+    private Func<ILayoutOverlapLookup, ILayoutItem> _itemFactory = itemFactory;
     private ILayoutItem? _item;
-
-    public LayoutBuilderItem(Func<ILayoutOverlapLookup, ILayoutItem> itemFactory)
-    {
-        _itemFactory = itemFactory;
-    }
 
     internal ILayoutItem Build(ILayoutOverlapLookup overlapLookup) => _item ??= _itemFactory(overlapLookup);
 

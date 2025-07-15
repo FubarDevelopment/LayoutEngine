@@ -6,14 +6,10 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.ControlElements;
 
-public class ControlLayoutContainer : ControlLayoutItem, ILayoutContainer
+public class ControlLayoutContainer(Control control, Visibility hiddenVisibility = Visibility.Collapsed)
+    : ControlLayoutItem(control, hiddenVisibility), ILayoutContainer
 {
-    private List<ILayoutItem> _children = new();
-
-    public ControlLayoutContainer(Control control, Visibility hiddenVisibility = Visibility.Collapsed)
-        : base(control, hiddenVisibility)
-    {
-    }
+    private List<ILayoutItem> _children = [];
 
     public ILayoutEngine? LayoutEngine { get; set; }
 

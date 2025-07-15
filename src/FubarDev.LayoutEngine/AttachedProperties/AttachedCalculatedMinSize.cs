@@ -25,13 +25,8 @@ public static class AttachedCalculatedMinSize
         }
     }
 
-    private sealed class PropertyInfo
+    private sealed class PropertyInfo(Size size)
     {
-        public PropertyInfo(Size size)
-        {
-            Size = size;
-        }
-
-        public Size Size { get; }
+        public Size Size { get; } = size;
     }
 }

@@ -7,14 +7,9 @@ using FubarDev.LayoutEngine.Engines;
 
 namespace FubarDev.LayoutEngine.LayoutBuilder;
 
-public class LayoutBuilderRoot
+public class LayoutBuilderRoot(ILayoutRoot root)
 {
-    private readonly ILayoutRoot _root;
-
-    public LayoutBuilderRoot(ILayoutRoot root)
-    {
-        _root = root;
-    }
+    private readonly ILayoutRoot _root = root;
 
     public ILayoutRoot Build()
         => _root;

@@ -6,7 +6,7 @@ namespace FubarDev.LayoutEngine.Test.TestElements;
 
 public class TestContainer : ILayoutContainer, IEnumerable<ILayoutItem>, ISettableMinimumSize
 {
-    private List<ILayoutItem> _children = new();
+    private List<ILayoutItem> _children = [];
     private Rectangle? _bounds;
     private ILayoutOverlapLookup? _overlapLookup;
 

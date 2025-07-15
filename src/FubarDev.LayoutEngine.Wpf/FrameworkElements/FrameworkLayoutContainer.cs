@@ -8,7 +8,7 @@ namespace FubarDev.LayoutEngine.FrameworkElements;
 
 public class FrameworkLayoutContainer : FrameworkLayoutItem, ILayoutContainer
 {
-    private List<ILayoutItem> _children = new();
+    private List<ILayoutItem> _children = [];
 
     public FrameworkLayoutContainer(FrameworkElement element)
         : base(element)

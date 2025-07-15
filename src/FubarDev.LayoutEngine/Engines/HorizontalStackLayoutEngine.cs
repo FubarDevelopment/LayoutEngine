@@ -9,14 +9,11 @@ using FubarDev.LayoutEngine.LayoutCalculation;
 
 namespace FubarDev.LayoutEngine.Engines;
 
-public sealed class HorizontalStackLayoutEngine : IHorizontalLayoutEngine
+public sealed class HorizontalStackLayoutEngine(
+    VerticalAlignment defaultAlignment = LayoutPane.DefaultVerticalAlignment)
+    : IHorizontalLayoutEngine
 {
-    public HorizontalStackLayoutEngine(VerticalAlignment defaultAlignment = LayoutPane.DefaultVerticalAlignment)
-    {
-        DefaultVerticalAlignment = defaultAlignment;
-    }
-
-    public VerticalAlignment DefaultVerticalAlignment { get; }
+    public VerticalAlignment DefaultVerticalAlignment { get; } = defaultAlignment;
 
     public void Layout(ILayoutContainer container, Rectangle bounds)
     {

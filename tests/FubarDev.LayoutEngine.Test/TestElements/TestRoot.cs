@@ -2,14 +2,9 @@
 
 namespace FubarDev.LayoutEngine.Test.TestElements;
 
-public class TestRoot : TestContainer, ILayoutRoot
+public class TestRoot(ILayoutEngine layoutEngine) : TestContainer(layoutEngine), ILayoutRoot
 {
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
-
-    public TestRoot(ILayoutEngine layoutEngine)
-        : base(layoutEngine)
-    {
-    }
 
     public Size ClientSize => Size;
     public Rectangle DisplayRectangle => new(Point.Empty, ClientSize);
@@ -21,14 +16,14 @@ public class TestRoot : TestContainer, ILayoutRoot
             return overlaps.AsReadOnly();
         }
 
-        return Array.Empty<ILayoutItem>();
+        return [];
     }
 
     public void AddOverlap(ILayoutItem item, ILayoutItem overlap)
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
         {
-            overlaps = new List<ILayoutItem>();
+            overlaps = [];
             _overlaps.Add(item, overlaps);
         }
 

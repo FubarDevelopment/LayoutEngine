@@ -11,15 +11,10 @@ using Size = System.Drawing.Size;
 
 namespace FubarDev.LayoutEngine.FrameworkElements;
 
-public class FrameworkLayoutRoot : FrameworkLayoutContainer, ILayoutRoot
+public class FrameworkLayoutRoot(FrameworkElement element) : FrameworkLayoutContainer(element), ILayoutRoot
 {
-    private static readonly ILayoutItem[] EmptyItems = Array.Empty<ILayoutItem>();
+    private static readonly ILayoutItem[] EmptyItems = [];
     private readonly Dictionary<ILayoutItem, List<ILayoutItem>> _overlaps = new();
-
-    public FrameworkLayoutRoot(FrameworkElement element)
-        : base(element)
-    {
-    }
 
     public Size ClientSize => GetClientSize(Element);
 
@@ -39,7 +34,7 @@ public class FrameworkLayoutRoot : FrameworkLayoutContainer, ILayoutRoot
     {
         if (!_overlaps.TryGetValue(item, out var overlaps))
         {
-            overlaps = new();
+            overlaps = [];
             _overlaps.Add(item, overlaps);
         }
 

@@ -7,22 +7,15 @@ using FubarDev.LayoutEngine.Elements;
 
 namespace FubarDev.LayoutEngine.HandleElements;
 
-public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin, ISettablePadding
+public class HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
+    : ILayoutItem, ISettableMinimumSize, ISettableMargin, ISettablePadding
 {
-    private readonly IWin32Window _window;
-    private readonly Visibility _hiddenVisibility;
     private IntPtr? _handle;
     private Size? _minimumSize;
     private Rectangle? _bounds;
     private IWin32Window? _rootWindow;
 
-    public HwndLayoutItem(IWin32Window window, Visibility hiddenVisibility = Visibility.Collapsed)
-    {
-        _window = window;
-        _hiddenVisibility = hiddenVisibility;
-    }
-
-    protected IntPtr Handle => _handle ??= _window.Handle;
+    protected IntPtr Handle => _handle ??= window.Handle;
 
     internal IWin32Window RootWindow
     {
@@ -53,7 +46,7 @@ public class HwndLayoutItem : ILayoutItem, ISettableMinimumSize, ISettableMargin
     public Size MaximumSize { get; } = new();
     public int Width => Bounds.Width;
     public int Height => Bounds.Height;
-    public Visibility Visibility => GetVisibility(Handle, _hiddenVisibility);
+    public Visibility Visibility => GetVisibility(Handle, hiddenVisibility);
     public Margin Margin { get; set; }
     public Margin Padding { get; set; }
 

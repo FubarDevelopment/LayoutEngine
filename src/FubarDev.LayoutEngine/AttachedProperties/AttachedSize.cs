@@ -17,27 +17,17 @@ public abstract class AttachedSize
     }
 
     [DebuggerDisplay("Fixed={Value}")]
-    public sealed class FixedSize : AttachedSize
+    public sealed class FixedSize(int value) : AttachedSize
     {
-        public FixedSize(int value)
-        {
-            Value = value;
-        }
-
-        public int Value { get; }
+        public int Value { get; } = value;
 
         public override string ToString() => $"Fixed={Value}";
     }
 
     [DebuggerDisplay("Factor={Value}")]
-    public sealed class FactorSize : AttachedSize
+    public sealed class FactorSize(double value) : AttachedSize
     {
-        public FactorSize(double value)
-        {
-            Value = value;
-        }
-
-        public double Value { get; }
+        public double Value { get; } = value;
 
         public override string ToString() => $"Factor={Value}";
     }
